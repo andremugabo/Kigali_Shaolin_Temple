@@ -1,0 +1,405 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------ PACKAGES ------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={const, let, var, function, return, if, else, for, while, break, continue, new},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{purple}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+
+% ------------------ PAGE SETUP ------------------
+\geometry{margin=1in}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Kigali Shaolin Temple Management System}
+\fancyhead[R]{System Blueprint}
+\fancyfoot[C]{\thepage}
+
+% ------------------ CODE STYLE ------------------
+\definecolor{codegray}{gray}{0.95}
+\lstset{
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\small,
+  frame=single,
+  breaklines=true
+}
+
+% ------------------ DOCUMENT ------------------
+\begin{document}
+
+% ------------------ TITLE PAGE ------------------
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge \textbf{Kigali Shaolin Temple Management System}}\\[0.5cm]
+    {\Large Frontend Website, Admin Portal (CMS), and Backend API}\\[2cm]
+    
+    \textbf{Purpose:}\\
+    A unified professional blueprint combining system analysis, UI/UX design,
+    CMS control, and backend logic.\\[1.5cm]
+    
+    \vfill
+    {\large \textbf{Prepared for:} Technical Documentation}\\
+    {\large \textbf{Year:} 2025}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ------------------------------------------------
+\section{General Project Overview}
+
+\textbf{Project Name:} Kigali Shaolin Temple Management System
+
+\textbf{Purpose:}  
+To promote Shaolin culture in Rwanda, manage clubs, programs, blogs, and allow administrators
+to dynamically control website content through a secure Content Management System (CMS).
+
+This document serves as a master reference for:
+\begin{itemize}
+    \item System development
+    \item Technical documentation
+    \item Project proposal or defense
+    \item Team onboarding
+\end{itemize}
+
+% ------------------------------------------------
+\section{System Architecture}
+
+The system follows a modern, scalable, production-ready architecture.
+
+\begin{verbatim}
+[ Frontend (Next.js + Tailwind) ]
+            |
+         REST API
+            |
+[ Backend (Node.js + TypeScript) ]
+            |
+[ Admin Portal (CMS Dashboard) ]
+            |
+[ Database (PostgreSQL / MySQL) ]
+\end{verbatim}
+
+\subsection*{Architecture Description}
+\begin{itemize}
+    \item Frontend: Public-facing website for visitors
+    \item Admin Portal: Secure CMS for content management
+    \item Backend API: Business logic, authentication, and data access
+    \item Database: Persistent storage
+\end{itemize}
+
+% ------------------------------------------------
+\section{Branding and UI Design System (Tailwind)}
+
+\subsection{Color Palette}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Role & Color \\
+\midrule
+Primary & \#7B1E1E (Shaolin Red) \\
+Dark & \#111111 \\
+Accent & \#C9A24D (Heritage Gold) \\
+Text & \#FFFFFF \\
+Muted & \#9CA3AF \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Tailwind Configuration}
+\begin{lstlisting}[language=JavaScript]
+extend: {
+  colors: {
+    primary: '#7B1E1E',
+    dark: '#111111',
+    gold: '#C9A24D',
+  }
+}
+\end{lstlisting}
+
+\subsection{Typography}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Usage & Font \\
+\midrule
+Headings & Playfair Display (Serif) \\
+Body Text & Inter / Poppins (Sans-serif) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ------------------------------------------------
+\section{Frontend Website (Public)}
+
+\subsection{Design Goals}
+\begin{itemize}
+    \item Cinematic visuals
+    \item Martial arts strength and discipline
+    \item Traditional yet modern appearance
+    \item Fully CMS-driven content
+    \item Mobile-first responsiveness
+\end{itemize}
+
+% ------------------------------------------------
+\section{Frontend Pages and Sections}
+
+\subsection{Header and Navigation}
+\begin{itemize}
+    \item Logo
+    \item Navigation: Home, About, Blog, Clubs, Contact
+    \item Language switcher (RW / EN / FR)
+\end{itemize}
+
+CMS Control: None (static navigation)
+
+\subsection{Hero Section}
+\begin{itemize}
+    \item Full-screen background image
+    \item Dark overlay
+    \item Title, subtitle, CTA button
+    \item Carousel slider
+\end{itemize}
+
+CMS Controlled:
+\begin{itemize}
+    \item Title and subtitle
+    \item Background images
+    \item Button text and link
+\end{itemize}
+
+\subsection{About Us Section}
+\begin{itemize}
+    \item Image and text layout
+    \item Founder quotation
+\end{itemize}
+
+CMS Controlled:
+\begin{itemize}
+    \item About text
+    \item Founder name
+    \item Images
+    \item Year founded
+\end{itemize}
+
+\subsection{Programs and Training}
+\begin{itemize}
+    \item Online Training
+    \item In-Person Training
+    \item Global Retreats
+\end{itemize}
+
+Each program contains:
+\begin{itemize}
+    \item Image
+    \item Title
+    \item Description
+    \item Status (active or inactive)
+\end{itemize}
+
+\subsection{Blogs}
+\begin{itemize}
+    \item Featured blog
+    \item Blog listing
+    \item Blog detail page
+\end{itemize}
+
+\subsection{Clubs}
+\begin{itemize}
+    \item Club name
+    \item Location
+    \item Instructor
+    \item Description
+    \item Images
+\end{itemize}
+
+\subsection{Contact Us}
+\begin{itemize}
+    \item Name
+    \item Email
+    \item Message
+\end{itemize}
+
+\subsection{Gallery}
+\begin{itemize}
+    \item Photo and video media
+    \item Categorization by event
+    \item Date and title metadata
+\end{itemize}
+
+Backend Requirements:
+\begin{itemize}
+    \item Message storage
+    \item Admin replies
+    \item Email notifications
+\end{itemize}
+
+% ------------------------------------------------
+\section{Admin Portal (CMS Dashboard)}
+
+\subsection{Authentication and Roles}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Role & Permissions \\
+\midrule
+Super Admin & Full access \\
+Content Manager & Create and edit content \\
+Editor & Limited editing \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Dashboard Modules}
+\begin{itemize}
+    \item Dashboard overview and system statistics
+    \item Homepage (Hero Slides) manager
+    \item About manager
+    \item Programs manager
+    \item Blog manager
+    \item Clubs and Tutorials manager
+    \item Gallery (Media) manager
+    \item Messages manager
+    \item Audit Logs (Activity tracking)
+    \item Language manager
+    \item Users and roles
+\end{itemize}
+
+% ------------------------------------------------
+\section{Backend (API and Logic)}
+
+\subsection{Core Responsibilities}
+\begin{itemize}
+    \item Authentication and authorization using JWT
+    \item Content APIs
+    \item Image uploads
+    \item Email services
+    \item Role-based access control
+\end{itemize}
+
+\subsection{Technology Stack}
+
+Backend:
+\begin{itemize}
+    \item Node.js with Express
+    \item JWT authentication and Authorization middleware
+    \item Multer and Cloudinary for media storage
+    \item Nodemailer for email invitations and password resets
+    \item Swagger (OpenAPI) for interactive API documentation
+    \item Audit Logging for administrative actions
+\end{itemize}
+
+Database:
+\begin{itemize}
+    \item PostgreSQL or MySQL
+    \item Prisma or TypeORM
+\end{itemize}
+
+% ------------------------------------------------
+\section{Database Models}
+
+\begin{lstlisting}[language=SQL]
+User(id, name, email, password, role, image, reset_token, created_at)
+
+HeroSlide(id, title, subtitle, image, button_text, button_link)
+
+About(id, content, founder_name, image)
+
+Program(id, name, description, image, status)
+
+Blog(id, title, content, image, category, published, created_at)
+
+Club(id, name, description, location, image)
+
+ClubTutorial(id, club_id, title, video_url)
+
+Gallery(id, title, description, url, media_type, event_date, category)
+
+ContactMessage(id, name, email, message, read, created_at)
+
+AuditLog(id, user_id, action, entity, entity_id, details, ip_address)
+\end{lstlisting}
+
+% ------------------------------------------------
+\section{Advanced System Features}
+
+\subsection{Audit Logging}
+All administrative actions (Create, Update, Delete, Restore) are logged in the system. Each log entry captures:
+\begin{itemize}
+    \item The administrator who performed the action
+    \item The type of action and the entity affected
+    \item A timestamp and the administrator's IP address
+\end{itemize}
+
+\subsection{Data Recovery and Soft Deletes}
+The system implements soft deletes (paranoid mode), allowing administrators to restore accidentally deleted content. Permanent deletion is only possible through a deliberate "Force Delete" action.
+
+\subsection{Interactive API Documentation}
+The backend includes a Swagger (OpenAPI) interface, providing real-time documentation and a testing environment for all API endpoints.
+
+% ------------------------------------------------
+\section{Non-Functional Requirements}
+
+\begin{itemize}
+    \item Mobile-first responsive design
+    \item Search engine optimization
+    \item Secure admin routes
+    \item Optimized images
+    \item Fast loading performance
+\end{itemize}
+
+% ------------------------------------------------
+\section{Final Summary}
+
+The Kigali Shaolin Temple Management System consists of three integrated layers:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Layer & Purpose \\
+\midrule
+Frontend & Public Shaolin Temple website \\
+Admin Portal & CMS for content management \\
+Backend & API, authentication, database \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This design:
+\begin{itemize}
+    \item Covers the majority of UI requirements from the provided design
+    \item Uses Tailwind CSS for a modern and professional interface
+    \item Enables scalability through CMS control
+\end{itemize}
+
+\end{document}
