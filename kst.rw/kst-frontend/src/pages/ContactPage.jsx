@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import apiClient from '../api/apiClient';
 import { Send, Phone, Mail, MapPin, Globe } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const ContactPage = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +11,9 @@ const ContactPage = () => {
         message: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [infoRef, infoVisible] = useScrollReveal();
+    const [formRef, formVisible] = useScrollReveal();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -37,7 +41,7 @@ const ContactPage = () => {
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-start">
                     {/* Contact Information */}
-                    <div>
+                    <div ref={infoRef} className={`reveal-hidden ${infoVisible ? 'reveal-visible' : ''}`}>
                         <p className="text-gold font-bold tracking-[0.6em] uppercase text-sm mb-6 drop-shadow-lg">Contact Us</p>
                         <h1 className="text-6xl md:text-8xl font-playfair font-black text-white text-glow leading-none italic mb-12 uppercase">
                             Get In <span className="text-primary italic font-playfair">Touch</span>
@@ -75,7 +79,7 @@ const ContactPage = () => {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="glass-gold p-10 lg:p-16 rounded-[3rem] shadow-luxury border-white/10 relative group">
+                    <div ref={formRef} className={`glass-gold p-10 lg:p-16 rounded-[3rem] shadow-luxury border-white/10 relative group reveal-hidden ${formVisible ? 'reveal-visible' : ''}`}>
                         <div className="absolute -inset-1 bg-gradient-to-br from-gold/20 via-transparent to-primary/20 rounded-[3rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                         <form onSubmit={handleSubmit} className="relative z-10 space-y-8">
                             <div>

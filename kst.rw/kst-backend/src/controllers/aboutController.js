@@ -82,7 +82,7 @@ const createAbout = async (req, res) => {
 const getAbout = async (req, res) => {
     try {
         const about = await aboutService.getAbout();
-        res.status(200).json({ success: true, data: about ? [sanitizeAbout(about)] : [] });
+        res.status(200).json({ success: true, data: sanitizeAbout(about) });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

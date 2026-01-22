@@ -34,9 +34,10 @@ To create an accessible digital platform that connects Shaolin culture with the 
 ### 🔐 Security & Authentication
 - **JWT-based Authentication** with role-based access control (RBAC)
 - **ID Obfuscation**: Base64URL encryption of UUIDs to prevent enumeration attacks
-- **Audit Logging**: Complete activity tracking with IP address recording
-- **Password Reset Flow**: Secure token-based password recovery
-- **Role Management**: Super Admin, Content Manager, and Editor roles
+- **Audit Logging**: Complete activity tracking with IP address recording and user attribution
+- **Password Reset Flow**: Secure token-based password recovery with Nodemailer
+- **Role Management**: Defined roles for Super Admin, Content Manager, Blogger, and Editor
+- **Ownership Verification**: Decentralized middleware for validating content ownership (e.g., Blogs)
 
 ### 📝 Content Management
 - **Hero Slides Manager**: Dynamic homepage carousel with CMS control
@@ -54,10 +55,11 @@ To create an accessible digital platform that connects Shaolin culture with the 
 - **Pagination**: Efficient data loading with configurable page sizes
 
 ### 🛠️ Developer Features
-- **Swagger Documentation**: Interactive API documentation
-- **Database Migrations**: Sequelize ORM with auto-sync
-- **Email Service**: Nodemailer integration for notifications
-- **Error Handling**: Global error middleware with proper HTTP status codes
+- **Swagger Documentation**: Interactive API documentation for all endpoints
+- **Database Migrations**: Sequelize ORM with standardized snake_case timestamp mapping
+- **Email Service**: Nodemailer integration for automated system notifications
+- **API Resilience**: Centralized `apiClient.js` with auto-token injection and 401 error handling
+- **Error Handling**: Global error middleware with consistent JSON responses
 - **CORS Configuration**: Secure cross-origin resource sharing
 
 ---
@@ -66,7 +68,7 @@ To create an accessible digital platform that connects Shaolin culture with the 
 
 ```
 ┌─────────────────────────────────────┐
-│  Frontend (Next.js + Tailwind)      │
+│  Frontend (React + Vite + Tailwind)  │
 │  - Public Shaolin Temple Website    │
 │  - Responsive Design                │
 │  - Multi-language (RW/EN/FR)        │
@@ -123,10 +125,12 @@ To create an accessible digital platform that connects Shaolin culture with the 
 - **Notifications**: React Toastify 11.0.5
 - **Charts**: Recharts 3.6.0
 
-### Frontend Website (Planned)
-- **Framework**: Next.js 14+ with App Router
-- **Styling**: Tailwind CSS
-- **Internationalization**: next-i18next (RW/EN/FR support)
+### Frontend Website (`kst-frontend`)
+- **Framework**: React 19.2.3
+- **Build Tool**: Vite 7.2.4
+- **Styling**: Tailwind CSS 4.1.18
+- **State Management**: Redux Toolkit (Pending)
+- **Internationalization**: Support for RW/EN/FR
 
 ### Database Schema
 - **Users**: Admin accounts with role-based permissions
@@ -425,15 +429,13 @@ Kigali_Shaolin_Temple/
 
 ## 🎨 Design System
 
-### Color Palette
+### Design Aesthetics (Premium Matrix)
 
-| Role      | Color Code | Usage                    |
-|-----------|------------|--------------------------|
-| Primary   | `#7B1E1E`  | Shaolin Red - Main brand |
-| Dark      | `#111111`  | Backgrounds              |
-| Gold      | `#C9A24D`  | Heritage Gold - Accents  |
-| Text      | `#FFFFFF`  | Primary text             |
-| Muted     | `#9CA3AF`  | Secondary text           |
+The system is built with a **Premium Matrix** design philosophy:
+- **Glassmorphism**: High-blur backdrops (`backdrop-blur-xl`) and semi-transparent layers.
+- **Cinematic Visuals**: Deep red and coal-black palette with gold accents.
+- **Advanced UI**: Custom scrollbars, interactive hover states, and smooth GSAP-like transitions.
+- **Responsive Mastery**: Tailored layouts for mobile, tablet, and desktop viewports.
 
 ### Typography
 

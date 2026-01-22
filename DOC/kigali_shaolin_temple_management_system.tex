@@ -96,15 +96,15 @@ This document serves as a master reference for:
 The system follows a modern, scalable, production-ready architecture.
 
 \begin{verbatim}
-[ Frontend (Next.js + Tailwind) ]
+[ Frontend (React + Vite) ]
             |
          REST API
             |
-[ Backend (Node.js + TypeScript) ]
+[ Backend (Node.js + Express) ]
             |
 [ Admin Portal (CMS Dashboard) ]
             |
-[ Database (PostgreSQL / MySQL) ]
+[ Database (PostgreSQL + Sequelize) ]
 \end{verbatim}
 
 \subsection*{Architecture Description}
@@ -139,11 +139,20 @@ Muted & \#9CA3AF \\
 extend: {
   colors: {
     primary: '#7B1E1E',
-    dark: '#111111',
-    gold: '#C9A24D',
+    dark: '#0A0A0A',
+    gold: '#C4A747',
   }
 }
 \end{lstlisting}
+
+\subsection{Design Aesthetics (Premium Matrix)}
+The system employs a high-end visual language referred to as the "Premium Matrix" aesthetic:
+\begin{itemize}
+    \item \textbf{Glassmorphism}: Interactive cards use \texttt{bg-white/70 backdrop-blur-xl} for a modern, layered feel.
+    \item \textbf{Cinematic Overlays}: Hero sections and media displays use deep gradients and subtle glows.
+    \item \textbf{Premium Shadows}: Custom shadows (\texttt{shadow-premium}) provide depth without clutter.
+    \item \textbf{Interactive Micro-animations}: Smooth hover effects and transitions are applied globally.
+\end{itemize}
 
 \subsection{Typography}
 
@@ -271,11 +280,12 @@ Backend Requirements:
 \begin{center}
 \begin{tabular}{ll}
 \toprule
-Role & Permissions \\
+Role & Description \\
 \midrule
-Super Admin & Full access \\
-Content Manager & Create and edit content \\
-Editor & Limited editing \\
+Super Admin & Complete system control and audit access \\
+Content Manager & Global content management across all modules \\
+Blogger & Focused access: creation and management of own blogs \\
+Editor & Standard content editing and review \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -317,12 +327,21 @@ Backend:
     \item Nodemailer for email invitations and password resets
     \item Swagger (OpenAPI) for interactive API documentation
     \item Audit Logging for administrative actions
+    \item \textbf{API Resilience}: Centralized \texttt{apiClient.js} implementation
+\end{itemize}
+
+\subsection{API Interceptors and Security}
+The frontend communication layer is hardened with:
+\begin{itemize}
+    \item \textbf{Request Interceptors}: Automatic injection of JWT Bearer tokens from local storage.
+    \item \textbf{Response Interceptors}: Global handling of 401 Unauthorized errors with automatic cleanup and redirect to login.
+    \item \textbf{Centralized Configuration}: Environment-based Base URL management for seamless dev/prod switching.
 \end{itemize}
 
 Database:
 \begin{itemize}
-    \item PostgreSQL or MySQL
-    \item Prisma or TypeORM
+    \item PostgreSQL
+    \item Sequelize ORM
 \end{itemize}
 
 % ------------------------------------------------

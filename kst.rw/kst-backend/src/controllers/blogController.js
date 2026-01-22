@@ -5,11 +5,21 @@ const { encodeUUID } = require('../utils/idUtils');
 const sanitizeBlog = (blog) => {
     if (!blog) return null;
     const plainBlog = blog.toJSON ? blog.toJSON() : blog;
-    return {
+
+    const sanitized = {
         ...plainBlog,
         id: encodeUUID(plainBlog.id),
         userId: plainBlog.userId ? encodeUUID(plainBlog.userId) : null
     };
+
+    if (sanitized.author) {
+        sanitized.author = {
+            ...sanitized.author,
+            id: sanitized.author.id ? encodeUUID(sanitized.author.id) : undefined
+        };
+    }
+
+    return sanitized;
 };
 
 /**

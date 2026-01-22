@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import apiClient, { getMediaPath } from '../api/apiClient';
-import { ChevronRight, ChevronLeft, ArrowRight } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const HomePage = () => {
     const [slides, setSlides] = useState([]);
@@ -10,6 +11,11 @@ const HomePage = () => {
     const [blogs, setBlogs] = useState([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [loading, setLoading] = useState(true);
+
+    const [aboutRef, aboutVisible] = useScrollReveal();
+    const [programsRef, programsVisible] = useScrollReveal();
+    const [blogsRef, blogsVisible] = useScrollReveal();
+    const [contactRef, contactVisible] = useScrollReveal();
 
     useEffect(() => {
         const fetchHomeData = async () => {
@@ -71,25 +77,28 @@ const HomePage = () => {
                                     <img
                                         src={getMediaPath(slide.image)}
                                         alt={slide.title}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-cover ken-burns"
                                     />
                                     <div className="absolute inset-0 cinematic-overlay" />
                                 </div>
 
                                 {/* Content */}
                                 <div className="relative z-20 h-full flex flex-col items-center justify-center text-center px-6">
-                                    <div className={`transition-all duration-1000 delay-300 transform ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-                                        }`}>
-                                        <p className="text-gold font-bold tracking-[0.5em] uppercase text-[10px] md:text-sm mb-6 drop-shadow-lg opacity-80">
+                                    <p className={`text-gold font-bold tracking-[0.6em] uppercase text-[10px] md:text-xs mb-10 transition-all duration-1000 delay-200 ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+                                        <span className="bg-white/[0.03] backdrop-blur-md px-8 py-3 rounded-full border border-white/10 shadow-luxury">
                                             {slide.subtitle || 'Heritage & Discipline'}
-                                        </p>
-                                        <h1 className="text-5xl md:text-8xl lg:text-[7vw] font-playfair font-black text-white text-glow mb-10 leading-[0.85] max-w-6xl mx-auto uppercase italic letter-spacing-hero">
-                                            {slide.title}
-                                        </h1>
+                                        </span>
+                                    </p>
+
+                                    <h1 className={`text-6xl md:text-9xl lg:text-[8vw] font-playfair font-black text-white text-glow mb-16 leading-[0.8] max-w-7xl mx-auto uppercase italic tracking-[-0.06em] transition-all duration-1000 delay-500 ${index === currentSlide ? 'translate-y-0 opacity-100 scale-100 visible' : 'translate-y-20 opacity-0 scale-95 invisible'}`}>
+                                        {slide.title}
+                                    </h1>
+
+                                    <div className={`transition-all duration-1000 delay-700 ${index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
                                         {slide.buttonText && (
                                             <Link
                                                 to={slide.buttonLink || '/programs'}
-                                                className="group relative inline-flex items-center space-x-4 bg-primary px-8 py-5 rounded-2xl text-white font-black tracking-widest uppercase text-sm hover:bg-gold transition-all duration-500 shadow-2xl active:scale-95 overflow-hidden"
+                                                className="group relative inline-flex items-center space-x-6 bg-primary px-10 py-6 rounded-2xl text-white font-black tracking-[0.2em] uppercase text-xs hover:bg-gold transition-all duration-500 shadow-luxury active:scale-95 overflow-hidden border border-white/5"
                                             >
                                                 <span className="relative z-10">{slide.buttonText}</span>
                                                 <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform duration-500" />
@@ -141,9 +150,14 @@ const HomePage = () => {
                 )}
             </section>
 
+            {/* Sacred Divide */}
+            <div className="h-24 bg-gradient-to-b from-black to-dark relative z-10 flex items-center justify-center">
+                <div className="w-px h-full bg-gradient-to-b from-gold/40 to-transparent" />
+            </div>
+
             {/* Mission Section (About Preview) */}
             {about && (
-                <section className="py-32 relative overflow-hidden bg-dark">
+                <section ref={aboutRef} className={`py-32 relative overflow-hidden bg-dark reveal-hidden ${aboutVisible ? 'reveal-visible' : ''}`}>
                     <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div className="relative group">
                             <div className="absolute -inset-4 bg-primary/20 rounded-[3rem] blur-2xl group-hover:bg-primary/30 transition-all duration-700" />
@@ -188,7 +202,7 @@ const HomePage = () => {
 
             {/* Featured Programs */}
             {programs.length > 0 && (
-                <section className="py-32 bg-black/40">
+                <section ref={programsRef} className={`py-32 bg-black/40 reveal-hidden ${programsVisible ? 'reveal-visible' : ''}`}>
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="text-center mb-20">
                             <p className="text-gold font-bold tracking-[0.4em] uppercase text-xs mb-4">Training Programs</p>
@@ -236,7 +250,7 @@ const HomePage = () => {
 
             {/* Latest Wisdom (Blog Preview) */}
             {blogs.length > 0 && (
-                <section className="py-32 bg-dark">
+                <section ref={blogsRef} className={`py-32 bg-dark reveal-hidden ${blogsVisible ? 'reveal-visible' : ''}`}>
                     <div className="max-w-7xl mx-auto px-6">
                         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 space-y-6 md:space-y-0">
                             <div>
@@ -259,7 +273,17 @@ const HomePage = () => {
                                     <img src={getMediaPath(blogs[0].image)} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/40 to-transparent" />
                                     <div className="absolute inset-0 p-12 flex flex-col justify-end">
-                                        <span className="bg-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white mb-6 w-fit">{blogs[0].category}</span>
+                                        <div className="flex items-center space-x-4 mb-6">
+                                            <span className="bg-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-white">{blogs[0].category}</span>
+                                            <div className="flex items-center space-x-2 text-gold/80 text-[10px] font-black uppercase tracking-widest">
+                                                {blogs[0].author?.image ? (
+                                                    <img src={getMediaPath(blogs[0].author.image)} alt="" className="w-5 h-5 rounded-full object-cover border border-gold/20" />
+                                                ) : (
+                                                    <Tag size={12} />
+                                                )}
+                                                <span>{blogs[0].author?.name || 'KST Master'}</span>
+                                            </div>
+                                        </div>
                                         <h3 className="text-4xl md:text-5xl font-playfair font-black text-white mb-4 group-hover:text-gold transition-colors italic leading-tight">{blogs[0].title}</h3>
                                         <p className="text-white/60 text-lg line-clamp-2 max-w-xl">{blogs[0].content?.replace(/<[^>]*>/g, '').substring(0, 150)}...</p>
                                     </div>
@@ -274,7 +298,13 @@ const HomePage = () => {
                                             <img src={getMediaPath(blog.image)} alt="" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                         </div>
                                         <div className="flex flex-col justify-center">
-                                            <span className="text-gold font-black uppercase tracking-widest text-[9px] mb-2">{blog.category}</span>
+                                            <div className="flex items-center space-x-3 mb-2">
+                                                <span className="text-gold font-black uppercase tracking-widest text-[9px]">{blog.category}</span>
+                                                <div className="flex items-center space-x-1.5 text-white/40 text-[9px] font-black uppercase tracking-widest">
+                                                    <span>By</span>
+                                                    <span className="text-white/60">{blog.author?.name || 'KST Master'}</span>
+                                                </div>
+                                            </div>
                                             <h3 className="text-xl md:text-2xl font-playfair font-black text-white group-hover:text-gold transition-colors italic leading-tight mb-3">{blog.title}</h3>
                                             <p className="text-white/40 text-sm line-clamp-2">{blog.content?.replace(/<[^>]*>/g, '').substring(0, 100)}...</p>
                                         </div>
@@ -287,7 +317,7 @@ const HomePage = () => {
             )}
 
             {/* Seek Guidance (Contact CTA) */}
-            <section className="py-40 relative group overflow-hidden">
+            <section ref={contactRef} className={`py-40 relative group overflow-hidden reveal-hidden ${contactVisible ? 'reveal-visible' : ''}`}>
                 <div className="absolute inset-0 bg-primary opacity-5 group-hover:opacity-10 transition-opacity duration-1000" />
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
                     <p className="text-gold font-bold tracking-[0.5em] uppercase text-sm mb-6">Join Us Today</p>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import apiClient, { getMediaPath } from '../../api/apiClient';
-import { MapPin, Users, Globe } from 'lucide-react';
+import { MapPin, Users, Globe, Award, Film } from 'lucide-react';
 
 const ClubListPage = () => {
     const [clubs, setClubs] = useState([]);
     const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         const fetchClubs = async () => {
@@ -31,9 +32,9 @@ const ClubListPage = () => {
     return (
         <div className="min-h-screen bg-dark pt-32 lg:pt-48 pb-32">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-24 relative">
+                <div className="text-center mb-24 relative animate-in fade-in slide-in-from-bottom-10 duration-1000 fill-mode-both">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10vw] font-playfair font-black text-white/[0.03] select-none uppercase tracking-tighter">
-                        Locations
+                        Branches
                     </div>
                     <p className="text-gold font-bold tracking-[0.6em] uppercase text-sm mb-6 drop-shadow-lg">Our Locations</p>
                     <h1 className="text-6xl md:text-9xl font-playfair font-black text-white text-glow leading-none italic mb-8 uppercase">
@@ -45,51 +46,75 @@ const ClubListPage = () => {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-                    {clubs.map((club) => (
+                    {clubs.map((club, index) => (
                         <div
                             key={club.id}
-                            className="group flex flex-col lg:flex-row bg-white/[0.02] border border-white/5 rounded-[3rem] overflow-hidden hover:border-gold/20 transition-all duration-700 hover:shadow-luxury"
+                            className="group flex flex-col lg:flex-row bg-white/[0.02] border border-white/5 rounded-[3rem] overflow-hidden hover:border-gold/20 transition-all duration-700 hover:shadow-luxury animate-in fade-in slide-in-from-bottom-10 fill-mode-both"
+                            style={{ animationDelay: `${index * 150}ms` }}
                         >
                             {/* Cinematic Visual */}
                             <div className="lg:w-1/2 h-[400px] lg:h-auto overflow-hidden relative">
                                 <img
                                     src={getMediaPath(club.image)}
                                     alt={club.name}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ken-burns"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-r from-dark/60 via-transparent to-transparent hidden lg:block" />
                                 <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-dark via-transparent to-transparent lg:hidden" />
+
+                                {club.tutorials?.length > 0 && (
+                                    <div className="absolute top-6 left-6">
+                                        <div className="glass-gold px-4 py-2 rounded-full flex items-center space-x-2 border border-gold/30">
+                                            <Award size={14} className="text-gold" />
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-white">
+                                                {club.tutorials.length} Scrolls of Wisdom
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Details */}
-                            <div className="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center">
+                            <div className="lg:w-1/2 p-10 lg:p-16 flex flex-col justify-center bg-gradient-to-br from-white/[0.01] to-transparent">
                                 <h3 className="text-4xl font-playfair font-black text-white mb-6 group-hover:text-gold transition-colors italic leading-tight">
                                     {club.name}
                                 </h3>
 
                                 <div className="space-y-6 mb-10">
-                                    <div className="flex items-center space-x-4 text-white/50">
-                                        <div className="w-10 h-10 rounded-xl glass-gold flex items-center justify-center text-gold">
+                                    <div className="flex items-center space-x-4 text-white/50 group-hover:text-white/70 transition-colors">
+                                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gold group-hover:bg-gold/10 group-hover:border-gold/30 transition-all">
                                             <MapPin size={20} />
                                         </div>
                                         <span className="font-medium text-lg">{club.location}</span>
                                     </div>
-                                    <div className="flex items-center space-x-4 text-white/50">
-                                        <div className="w-10 h-10 rounded-xl glass-gold flex items-center justify-center text-gold">
+                                    <div className="flex items-center space-x-4 text-white/50 group-hover:text-white/70 transition-colors">
+                                        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gold group-hover:bg-gold/10 group-hover:border-gold/30 transition-all">
                                             <Users size={20} />
                                         </div>
-                                        <span className="font-medium text-lg italic">Head Instructor</span>
+                                        <div className="flex flex-col">
+                                            <span className="text-[10px] font-black uppercase tracking-widest text-gold/60">Temple Guidance</span>
+                                            <span className="font-medium text-lg italic">Master Instructor</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <p className="text-white/40 text-base leading-relaxed mb-10 line-clamp-4">
+                                <p className="text-white/40 text-base leading-relaxed mb-10 line-clamp-4 font-medium group-hover:text-white/60 transition-colors">
                                     {club.description}
                                 </p>
 
-                                <button className="inline-flex items-center space-x-4 px-8 py-4 bg-primary rounded-2xl text-white font-black uppercase tracking-widest text-xs hover:bg-gold transition-all shadow-xl self-start">
-                                    <span>Join This Club</span>
-                                    <Globe size={16} />
-                                </button>
+                                <div className="flex flex-wrap items-center gap-4">
+                                    <button className="inline-flex items-center space-x-4 px-8 py-5 bg-primary rounded-2xl text-white font-black uppercase tracking-widest text-xs hover:bg-gold transition-all shadow-luxury active:scale-95 border border-white/5">
+                                        <span>Join The Sanctuary</span>
+                                        <Globe size={16} />
+                                    </button>
+
+                                    {club.tutorials?.length > 0 && (
+                                        <button className="inline-flex items-center space-x-4 px-6 py-5 bg-white/5 border border-white/10 rounded-2xl text-gold font-black uppercase tracking-widest text-xs hover:bg-white/10 transition-all active:scale-95">
+                                            <Film size={16} />
+                                            <span>Enter Library</span>
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     ))}

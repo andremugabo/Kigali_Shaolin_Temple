@@ -37,7 +37,7 @@ app.use(cors({
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   credentials: true,
-  exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length'], // Essential for video playback
+  exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length'],
   optionsSuccessStatus: 200,
 }));
 

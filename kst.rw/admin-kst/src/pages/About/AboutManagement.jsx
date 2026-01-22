@@ -138,7 +138,7 @@ const AboutManagement = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                         </div>
                         <div className="absolute -bottom-6 -left-6 bg-primary text-white p-6 rounded-[2rem] shadow-2xl shadow-primary/40 -rotate-6">
-                            <p className="text-xs font-black uppercase tracking-widest">Est. 1996</p>
+                            <p className="text-xs font-black uppercase tracking-widest">Est. 1998</p>
                         </div>
                     </div>
                 </div>

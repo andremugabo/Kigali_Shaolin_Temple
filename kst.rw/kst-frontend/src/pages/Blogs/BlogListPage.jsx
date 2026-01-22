@@ -70,15 +70,23 @@ const BlogListPage = () => {
 
                             {/* Manuscript Content */}
                             <div className="p-8 lg:p-10 flex-1 flex flex-col">
-                                <div className="flex items-center space-x-4 text-white/30 text-[10px] font-bold uppercase tracking-widest mb-6">
+                                <div className="flex flex-wrap items-center gap-4 text-white/30 text-[10px] font-bold uppercase tracking-widest mb-6">
                                     <div className="flex items-center space-x-1.5">
                                         <Calendar size={12} className="text-gold" />
                                         <span>{new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                     </div>
                                     <div className="w-1 h-1 bg-white/10 rounded-full" />
-                                    <div className="flex items-center space-x-1.5">
-                                        <Tag size={12} className="text-gold" />
-                                        <span>{blog.category}</span>
+                                    <div className="flex items-center space-x-2 text-gold/80">
+                                        {blog.author?.image ? (
+                                            <img
+                                                src={getMediaPath(blog.author.image)}
+                                                alt={blog.author?.name}
+                                                className="w-5 h-5 rounded-full object-cover border border-gold/20"
+                                            />
+                                        ) : (
+                                            <Tag size={12} className="text-gold" />
+                                        )}
+                                        <span>{blog.author?.name || 'KST Master'}</span>
                                     </div>
                                 </div>
 

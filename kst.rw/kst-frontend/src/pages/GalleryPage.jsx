@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import apiClient, { getMediaPath } from '../api/apiClient';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 import { Image as ImageIcon, Video, Calendar, Filter, X } from 'lucide-react';
 
 const GalleryPage = () => {
@@ -7,6 +8,9 @@ const GalleryPage = () => {
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('ALL');
     const [selectedItem, setSelectedItem] = useState(null);
+
+    const [headerRef, headerVisible] = useScrollReveal();
+    const [gridRef, gridVisible] = useScrollReveal();
 
     const categories = ['ALL', 'TRAINING', 'CEREMONY', 'HERITAGE', 'COMMUNITY'];
 
@@ -37,7 +41,7 @@ const GalleryPage = () => {
     return (
         <div className="min-h-screen bg-dark pt-32 lg:pt-48 pb-32">
             <div className="max-w-7xl mx-auto px-6">
-                <div className="text-center mb-24 relative">
+                <div ref={headerRef} className={`text-center mb-24 relative reveal-hidden ${headerVisible ? 'reveal-visible' : ''}`}>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10vw] font-playfair font-black text-white/[0.03] select-none uppercase tracking-tighter">
                         Gallery
                     </div>
@@ -67,7 +71,7 @@ const GalleryPage = () => {
                 </div>
 
                 {/* Gallery Grid */}
-                <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+                <div ref={gridRef} className={`columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 reveal-hidden ${gridVisible ? 'reveal-visible' : ''}`}>
                     {media.map((item) => (
                         <div
                             key={item.id}

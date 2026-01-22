@@ -10,7 +10,7 @@ const getAllBlogs = async (page = 1, limit = 10, category = null) => {
 
     const { count, rows } = await Blog.findAndCountAll({
         where,
-        include: [{ model: User, as: 'author', attributes: ['name', 'email'] }],
+        include: [{ model: User, as: 'author', attributes: ['name', 'email', 'image'] }],
         offset,
         limit,
         order: [['created_at', 'DESC']],
@@ -25,7 +25,7 @@ const getAllBlogs = async (page = 1, limit = 10, category = null) => {
 
 const getBlogById = async (id) => {
     return await Blog.findByPk(id, {
-        include: [{ model: User, as: 'author', attributes: ['name', 'email'] }],
+        include: [{ model: User, as: 'author', attributes: ['name', 'email', 'image'] }],
     });
 };
 

@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import apiClient, { getMediaPath } from '../api/apiClient';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const AboutPage = () => {
     const [about, setAbout] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [scrollY, setScrollY] = useState(0);
+
+    const [narrativeRef, narrativeVisible] = useScrollReveal();
+    const [principlesRef, principlesVisible] = useScrollReveal();
+
+    useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         const fetchAbout = async () => {
@@ -33,10 +44,13 @@ const AboutPage = () => {
             <div className="max-w-7xl mx-auto px-6">
                 {/* Header Section */}
                 <div className="text-center mb-24 relative">
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10vw] font-playfair font-black text-white/[0.03] select-none uppercase tracking-tighter">
+                    <div
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10vw] font-playfair font-black text-white/[0.03] select-none uppercase tracking-tighter"
+                        style={{ transform: `translate(-50%, calc(-50% + ${scrollY * 0.1}px))` }}
+                    >
                         History
                     </div>
-                    <p className="text-gold font-bold tracking-[0.6em] uppercase text-sm mb-6 drop-shadow-lg">Since 2012</p>
+                    <p className="text-gold font-bold tracking-[0.6em] uppercase text-sm mb-6 drop-shadow-lg">Since 1998</p>
                     <h1 className="text-6xl md:text-9xl font-playfair font-black text-white text-glow leading-none italic uppercase">
                         About <span className="text-primary italic font-playfair">Us</span>
                     </h1>
@@ -45,7 +59,7 @@ const AboutPage = () => {
                 {about && (
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-start mb-40">
                         {/* Narrative */}
-                        <div className="space-y-12">
+                        <div ref={narrativeRef} className={`space-y-12 reveal-hidden ${narrativeVisible ? 'reveal-visible' : ''}`}>
                             <div className="relative">
                                 <span className="absolute -left-12 top-0 text-7xl font-playfair text-primary/40 italic">"</span>
                                 <h2 className="text-4xl md:text-5xl font-playfair font-black text-white leading-tight italic">
@@ -60,7 +74,7 @@ const AboutPage = () => {
                             </div>
 
                             {/* Principles Grid */}
-                            <div className="grid grid-cols-2 gap-6 pt-12">
+                            <div ref={principlesRef} className={`grid grid-cols-2 gap-6 pt-12 reveal-hidden ${principlesVisible ? 'reveal-visible' : ''}`}>
                                 {[
                                     { label: 'Wisdom', icon: '01' },
                                     { label: 'Spirit', icon: '02' },
@@ -83,7 +97,7 @@ const AboutPage = () => {
                                     <img
                                         src={getMediaPath(about.image)}
                                         alt="Founder"
-                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
+                                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110 ken-burns"
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/20 to-transparent" />
 
