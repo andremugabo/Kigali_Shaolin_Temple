@@ -12,7 +12,7 @@ const ProgramForm = ({ program, onClose }) => {
     const [formData, setFormData] = useState({
         name: '',
         description: '',
-        status: 'Active',
+        status: 'active',
     });
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -22,7 +22,7 @@ const ProgramForm = ({ program, onClose }) => {
             setFormData({
                 name: program.name || '',
                 description: program.description || '',
-                status: program.status || 'Active',
+                status: program.status || 'active',
             });
             if (program.image) {
                 setImagePreview(program.image);
@@ -101,9 +101,9 @@ const ProgramForm = ({ program, onClose }) => {
                                 onChange={handleChange}
                                 className="w-full bg-white border border-gray-200 rounded-2xl py-3 px-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-bold uppercase tracking-widest text-gray-700 appearance-none shadow-sm"
                             >
-                                <option value="Active">Operational (Active)</option>
-                                <option value="Inactive">Halted (Inactive)</option>
-                                <option value="Archived">Archived</option>
+                                <option value="active">Operational (Active)</option>
+                                <option value="inactive">Halted (Inactive)</option>
+                                <option value="archived">Archived</option>
                             </select>
                             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                                 <Activity size={18} />

@@ -367,6 +367,52 @@ The system implements soft deletes (paranoid mode), allowing administrators to r
 \subsection{Interactive API Documentation}
 The backend includes a Swagger (OpenAPI) interface, providing real-time documentation and a testing environment for all API endpoints.
 
+\subsection{ID Obfuscation (UUID Encryption)}
+To enhance security and prevent exposure of internal database structure, the system implements ID obfuscation using Base64URL encoding:
+
+\begin{itemize}
+    \item All public-facing UUIDs are encoded using Base64URL (URL-safe encryption)
+    \item Backend transparently decodes obfuscated IDs via middleware
+    \item Prevents enumeration attacks and information disclosure
+    \item Maintains backward compatibility with existing UUID structure
+\end{itemize}
+
+Implementation:
+\begin{lstlisting}[language=JavaScript]
+// Encoding: UUID -> Base64URL
+const encodeUUID = (uuid) => {
+  const hex = uuid.replace(/-/g, '');
+  const buffer = Buffer.from(hex, 'hex');
+  return buffer.toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+};
+
+// Decoding middleware applied to all routes
+router.get('/:id', decodeParam('id'), controller.getById);
+\end{lstlisting}
+
+\subsection{Database Schema Standardization}
+All Sequelize models have been standardized with explicit $snake_cas$e timestamp mappings to ensure database consistency:
+
+\begin{itemize}
+    \item Explicit mapping: \texttt{createdAt: '$created_at$', updatedAt: '$updated_at$'}
+    \item Resolves Sequelize ordering and query inconsistencies
+    \item Prevents 500 Internal Server Errors from column name mismatches
+    \item Applied to all models: Club, Program, Gallery, About, HeroSlide, User, Blog, ContactMessage, AuditLog
+\end{itemize}
+
+\subsection{Frontend Stability Enhancements}
+The admin portal includes robust error handling and defensive programming practices:
+
+\begin{itemize}
+    \item Optional chaining for safe property access (\texttt{pagination?.totalItems})
+    \item Default values for undefined data states
+    \item Pagination protection against crashes during network latency
+    \item Error boundaries for graceful degradation
+\end{itemize}
+
 % ------------------------------------------------
 \section{Non-Functional Requirements}
 

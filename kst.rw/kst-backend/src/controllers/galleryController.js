@@ -61,14 +61,17 @@ const uploadMedia = async (req, res) => {
 
         const { title, description, eventDate, category, mediaType } = req.body;
 
+        // Normalize mediaType to uppercase for enum compatibility (IMAGE/VIDEO)
+        const normalizedMediaType = mediaType ? mediaType.toUpperCase() : 'IMAGE';
+
         const galleryItem = await galleryService.createGalleryItem({
             title,
             description,
             eventDate,
             category,
-            mediaType: mediaType || 'IMAGE', // Default
-            mediaUrl: req.file.path, // Cloudinary URL
-            publicId: req.file.filename, // Cloudinary Public ID
+            mediaType: normalizedMediaType,
+            mediaUrl: req.file.path, // Full path with absolute URL
+            publicId: req.file.filename,
         });
 
         // Log Action

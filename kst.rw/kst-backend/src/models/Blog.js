@@ -30,7 +30,7 @@ const Blog = sequelize.define('Blog', {
 }, {
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: false,
+    updatedAt: 'updated_at',
     paranoid: true,
 });
 

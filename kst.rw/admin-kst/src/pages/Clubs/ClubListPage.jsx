@@ -96,22 +96,26 @@ const ClubListPage = () => {
                 </td>
                 <td className="px-6 py-5 text-right">
                     <div className="flex items-center justify-end space-x-2">
-                        <button
-                            onClick={() => handleManageTutorials(club)}
-                            className="p-2.5 text-gray-400 hover:text-blue-500 transition-all hover:bg-blue-50 rounded-xl flex items-center gap-1.5"
-                            title="Manage Tutorials"
-                        >
-                            <Film size={18} />
-                            <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Tutorials</span>
-                        </button>
-                        <button
-                            onClick={() => handleEditClub(club)}
-                            className="p-2.5 text-gray-400 hover:text-emerald-500 transition-all hover:bg-emerald-50 rounded-xl"
-                        ><Edit size={18} /></button>
-                        <button
-                            onClick={() => handleDeleteClub(club.id)}
-                            className="p-2.5 text-gray-400 hover:text-red-500 transition-all hover:bg-red-50 rounded-xl"
-                        ><Trash2 size={18} /></button>
+                        {showActions && (
+                            <>
+                                <button
+                                    onClick={() => handleManageTutorials(club)}
+                                    className="p-2.5 text-gray-400 hover:text-blue-500 transition-all hover:bg-blue-50 rounded-xl flex items-center gap-1.5"
+                                    title="Manage Tutorials"
+                                >
+                                    <Film size={18} />
+                                    <span className="text-[10px] font-black uppercase tracking-widest hidden sm:inline">Tutorials</span>
+                                </button>
+                                <button
+                                    onClick={() => handleEditClub(club)}
+                                    className="p-2.5 text-gray-400 hover:text-emerald-500 transition-all hover:bg-emerald-50 rounded-xl"
+                                ><Edit size={18} /></button>
+                                <button
+                                    onClick={() => handleDeleteClub(club.id)}
+                                    className="p-2.5 text-gray-400 hover:text-red-500 transition-all hover:bg-red-50 rounded-xl"
+                                ><Trash2 size={18} /></button>
+                            </>
+                        )}
                     </div>
                 </td>
             </tr>

@@ -2,14 +2,15 @@ const express = require('express');
 const router = express.Router();
 const { programController } = require('../controllers');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const { upload } = require('../middleware/uploadMiddleware');
+const { uploadImage, processProgramImage } = require('../middleware/uploadMiddleware');
 const { decodeParam } = require('../middleware/idMiddleware');
 
 router.post(
     '/',
     protect,
     authorize('Admin', 'Content Manager', 'Super Admin'),
-    upload.single('image'),
+    uploadImage.single('image'),
+    processProgramImage,
     programController.createProgram
 );
 
@@ -21,7 +22,8 @@ router.put(
     decodeParam('id'),
     protect,
     authorize('Admin', 'Content Manager', 'Super Admin'),
-    upload.single('image'),
+    uploadImage.single('image'),
+    processProgramImage,
     programController.updateProgram
 );
 

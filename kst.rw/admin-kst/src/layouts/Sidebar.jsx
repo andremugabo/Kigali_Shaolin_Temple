@@ -44,8 +44,8 @@ const Sidebar = () => {
         <div className="w-64 bg-dark h-full flex flex-col border-r border-gray-800 shrink-0">
             <div className="p-6">
                 <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg border border-primary/50">
-                        K
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg border border-gray-100 overflow-hidden transform hover:scale-110 transition-transform duration-500">
+                        <img src="/logo.png" alt="KST Logo" className="w-full h-full object-contain p-1" />
                     </div>
                     <div>
                         <h1 className="text-white font-bold text-lg leading-tight uppercase tracking-wider">KST Portal</h1>

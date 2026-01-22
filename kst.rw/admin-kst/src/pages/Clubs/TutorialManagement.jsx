@@ -151,8 +151,18 @@ const TutorialManagement = ({ club, onClose }) => {
                         <div key={tutorial.id} className="group bg-white rounded-3xl border border-gray-100 p-5 hover:shadow-xl hover:shadow-gray-200/40 transition-all flex flex-col justify-between">
                             <div className="flex items-start justify-between mb-4">
                                 <div className="flex items-center space-x-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-gray-900 flex items-center justify-center text-primary shadow-lg group-hover:rotate-6 transition-transform">
-                                        <Play size={20} fill="currentColor" />
+                                    <div className="w-16 h-12 rounded-xl bg-gray-900 overflow-hidden relative group/vid shadow-lg transition-transform group-hover:scale-105">
+                                        <video
+                                            src={tutorial.videoUrl}
+                                            className="w-full h-full object-cover"
+                                            muted
+                                            playsInline
+                                            onMouseOver={(e) => e.target.play()}
+                                            onMouseOut={(e) => { e.target.pause(); e.target.currentTime = 0; }}
+                                        />
+                                        <div className="absolute inset-0 bg-black/40 group-hover/vid:bg-transparent transition-colors flex items-center justify-center pointer-events-none">
+                                            <Play size={16} className="text-white fill-white" />
+                                        </div>
                                     </div>
                                     <div>
                                         <h5 className="text-sm font-black text-gray-900 group-hover:text-primary transition-colors lowercase tracking-tight">{tutorial.title}</h5>

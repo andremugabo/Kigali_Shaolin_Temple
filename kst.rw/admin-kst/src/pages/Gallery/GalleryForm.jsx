@@ -206,13 +206,12 @@ const GalleryForm = ({ item, onClose }) => {
                     {item && item.mediaUrl && (
                         <div className="h-full min-h-[250px] relative rounded-[2.5rem] overflow-hidden border border-gray-100 group">
                             {item.mediaType === 'VIDEO' ? (
-                                <div className="w-full h-full bg-gray-900 flex items-center justify-center">
-                                    <Video size={64} className="text-primary/20" />
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                        <div className="p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-                                            <Video size={32} className="text-white" fill="white" />
-                                        </div>
-                                    </div>
+                                <div className="w-full h-full bg-gray-900 flex items-center justify-center relative">
+                                    <video
+                                        src={item.mediaUrl}
+                                        className="w-full h-full object-contain"
+                                        controls
+                                    />
                                 </div>
                             ) : (
                                 <img src={item.mediaUrl} alt="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />

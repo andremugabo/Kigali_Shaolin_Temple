@@ -90,16 +90,20 @@ const ProgramListPage = () => {
                     </div>
                 </td>
                 <td className="px-6 py-5 text-right">
-                    <div className="flex items-center justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center justify-end space-x-2">
                         <button className="p-2.5 text-gray-400 hover:text-primary transition-all hover:bg-primary/5 rounded-xl"><Eye size={18} /></button>
-                        <button
-                            onClick={() => handleEdit(program)}
-                            className="p-2.5 text-gray-400 hover:text-emerald-500 transition-all hover:bg-emerald-50 rounded-xl"
-                        ><Edit size={18} /></button>
-                        <button
-                            onClick={() => handleDelete(program.id)}
-                            className="p-2.5 text-gray-400 hover:text-red-500 transition-all hover:bg-red-50 rounded-xl"
-                        ><Trash2 size={18} /></button>
+                        {showActions && (
+                            <>
+                                <button
+                                    onClick={() => handleEdit(program)}
+                                    className="p-2.5 text-gray-400 hover:text-emerald-500 transition-all hover:bg-emerald-50 rounded-xl"
+                                ><Edit size={18} /></button>
+                                <button
+                                    onClick={() => handleDelete(program.id)}
+                                    className="p-2.5 text-gray-400 hover:text-red-500 transition-all hover:bg-red-50 rounded-xl"
+                                ><Trash2 size={18} /></button>
+                            </>
+                        )}
                     </div>
                 </td>
             </tr>

@@ -103,19 +103,25 @@ const BlogListPage = () => {
                 <td className="px-6 py-5 text-right">
                     <div className="flex items-center justify-end space-x-2">
                         <button className="p-2 text-gray-400 hover:text-primary transition-colors hover:bg-primary/5 rounded-xl"><Eye size={18} /></button>
-                        <button
-                            onClick={() => handleEdit(blog)}
-                            className="p-2 text-gray-400 hover:text-emerald-500 transition-colors hover:bg-emerald-50 rounded-xl"
-                        ><Edit size={18} /></button>
-                        <button
-                            onClick={() => handleDelete(blog.id)}
-                            className="p-2 text-gray-400 hover:text-red-500 transition-colors hover:bg-red-50 rounded-xl"
-                        ><Trash2 size={18} /></button>
+                        {showActions && (
+                            <>
+                                <button
+                                    onClick={() => handleEdit(blog)}
+                                    className="p-2 text-gray-400 hover:text-emerald-500 transition-colors hover:bg-emerald-50 rounded-xl"
+                                ><Edit size={18} /></button>
+                                <button
+                                    onClick={() => handleDelete(blog.id)}
+                                    className="p-2 text-gray-400 hover:text-red-500 transition-colors hover:bg-red-50 rounded-xl"
+                                ><Trash2 size={18} /></button>
+                            </>
+                        )}
                     </div>
                 </td>
             </tr>
         );
     };
+
+    const showActions = ['Super Admin', 'Admin', 'Content Manager', 'Blogger'].includes(user.role);
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -127,13 +133,15 @@ const BlogListPage = () => {
                     </h1>
                     <p className="text-gray-500 mt-1 font-medium italic">Manage all temple manuscripts and chronicles here.</p>
                 </div>
-                <Button
-                    onClick={handleCreate}
-                    icon={Plus}
-                    className="shadow-xl shadow-primary/20 hover:shadow-primary/30"
-                >
-                    Draft New Wisdom
-                </Button>
+                {showActions && (
+                    <Button
+                        onClick={handleCreate}
+                        icon={Plus}
+                        className="shadow-xl shadow-primary/20 hover:shadow-primary/30"
+                    >
+                        Draft New Wisdom
+                    </Button>
+                )}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white p-4 rounded-3xl border border-gray-100 shadow-sm">

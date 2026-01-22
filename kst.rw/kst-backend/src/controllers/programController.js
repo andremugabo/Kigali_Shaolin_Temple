@@ -49,6 +49,12 @@ const sanitizeProgram = (program) => {
 const createProgram = async (req, res) => {
     try {
         const programData = { ...req.body };
+
+        // Normalize status to lowercase
+        if (programData.status) {
+            programData.status = programData.status.toLowerCase();
+        }
+
         if (req.file) {
             programData.image = req.file.path;
         }
@@ -67,6 +73,7 @@ const createProgram = async (req, res) => {
 
         res.status(201).json({ success: true, data: sanitizeProgram(program) });
     } catch (error) {
+        console.error('Create Program Error:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 };
@@ -154,6 +161,12 @@ const getProgramById = async (req, res) => {
 const updateProgram = async (req, res) => {
     try {
         const updateData = { ...req.body };
+
+        // Normalize status to lowercase
+        if (updateData.status) {
+            updateData.status = updateData.status.toLowerCase();
+        }
+
         if (req.file) {
             updateData.image = req.file.path;
         }

@@ -20,7 +20,7 @@ const Program = sequelize.define('Program', {
         allowNull: true,
     },
     status: {
-        type: DataTypes.ENUM('active', 'inactive'),
+        type: DataTypes.ENUM('active', 'inactive', 'archived'),
         defaultValue: 'active',
     },
 }, {

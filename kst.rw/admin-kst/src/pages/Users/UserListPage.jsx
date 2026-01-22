@@ -110,7 +110,7 @@ const UserListPage = () => {
                 </td>
                 <td className="px-6 py-5 text-right">
                     <div className="flex items-center justify-end space-x-2">
-                        {!isSelf && (
+                        {showActions && !isSelf && (
                             <>
                                 <button
                                     onClick={() => handleEdit(user)}
@@ -136,6 +136,8 @@ const UserListPage = () => {
         );
     };
 
+    const showActions = ['Super Admin', 'Admin'].includes(currentUser.role);
+
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2 border-b border-gray-100">
@@ -146,13 +148,15 @@ const UserListPage = () => {
                     </h1>
                     <p className="text-gray-500 mt-1 font-medium italic">Manage the keepers of the temple's digital chronicles.</p>
                 </div>
-                <Button
-                    onClick={handleCreate}
-                    icon={Plus}
-                    className="shadow-xl shadow-primary/20 hover:shadow-primary/30"
-                >
-                    Annex New Member
-                </Button>
+                {showActions && (
+                    <Button
+                        onClick={handleCreate}
+                        icon={Plus}
+                        className="shadow-xl shadow-primary/20 hover:shadow-primary/30"
+                    >
+                        Annex New Member
+                    </Button>
+                )}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-white p-4 rounded-3xl border border-gray-100 shadow-sm">

@@ -12,28 +12,43 @@ const PORT = process.env.PORT || 3005;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Debug middleware to log requests
+app.use((req, res, next) => {
+  if (req.url.startsWith('/uploads')) {
+    console.log(`[Static Request] ${req.method} ${req.url}`);
+  }
+  next();
+});
+
 
 const allowedOrigins = [
   'http://localhost',
   'http://localhost:5173',
+  'http://localhost:5174',
   'http://localhost:80',
   'http://localhost:3005'
 ];
 
-app.use(cors(
-  {
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error(`CORS policy: origin ${origin} not allowed`));
-    },
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    credentials: true,
-    optionsSuccessStatus: 200,
-  }
-))
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error(`CORS policy: origin ${origin} not allowed`));
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  credentials: true,
+  exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length'], // Essential for video playback
+  optionsSuccessStatus: 200,
+}));
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve static files from uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.mp4') || path.endsWith('.webm')) {
+      res.set('Accept-Ranges', 'bytes');
+    }
+  }
+}));
 
 const setupSwagger = require('./swagger');
 
@@ -69,7 +84,7 @@ app.use((err, req, res, next) => {
 // ---------------------
 // Start server
 // ---------------------
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
   console.log('Database connected and synced');
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

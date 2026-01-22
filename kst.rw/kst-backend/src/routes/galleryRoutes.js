@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { galleryController } = require('../controllers');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const { upload } = require('../middleware/uploadMiddleware');
+const { uploadAny, processMedia } = require('../middleware/uploadMiddleware');
 const { decodeParam } = require('../middleware/idMiddleware');
 
 // Public Routes
@@ -13,7 +13,8 @@ router.post(
     '/',
     protect,
     authorize('Admin', 'Content Manager', 'Super Admin'),
-    upload.single('file'),
+    uploadAny.single('file'),
+    processMedia,
     galleryController.uploadMedia
 );
 

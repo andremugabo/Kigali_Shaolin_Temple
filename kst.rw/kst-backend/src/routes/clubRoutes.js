@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { clubController } = require('../controllers'); // Fix import
+const { clubController } = require('../controllers');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const { upload } = require('../middleware/uploadMiddleware');
+const { uploadImage, uploadVideo, processClubImage, processVideo } = require('../middleware/uploadMiddleware');
 const { decodeParam } = require('../middleware/idMiddleware');
 
 // Protected (Create/Update)
@@ -10,7 +10,8 @@ router.post(
     '/',
     protect,
     authorize('Admin', 'Super Admin'),
-    upload.single('image'),
+    uploadImage.single('image'),
+    processClubImage,
     clubController.createClub
 );
 
@@ -22,7 +23,8 @@ router.put(
     decodeParam('id'),
     protect,
     authorize('Admin', 'Super Admin'),
-    upload.single('image'), // Enable update with image
+    uploadImage.single('image'), // Enable update with image
+    processClubImage,
     clubController.updateClub
 );
 
@@ -37,7 +39,8 @@ router.post(
     decodeParam('id'),
     protect,
     authorize('Admin', 'Content Manager', 'Super Admin'),
-    upload.single('video'),
+    uploadVideo.single('video'),
+    processVideo,
     clubController.addTutorial
 );
 

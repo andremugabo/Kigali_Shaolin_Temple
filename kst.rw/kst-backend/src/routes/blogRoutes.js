@@ -3,7 +3,7 @@ const router = express.Router();
 const { blogController } = require('../controllers');
 const { logView } = require('../middleware/activityLogger');
 const { protect, authorize, checkBlogOwnership } = require('../middleware/authMiddleware');
-const { upload } = require('../middleware/uploadMiddleware'); // Import upload
+const { uploadImage, processBlogImage } = require('../middleware/uploadMiddleware');
 const { decodeParam } = require('../middleware/idMiddleware');
 
 // Public
@@ -14,8 +14,9 @@ router.get('/:id', decodeParam('id'), logView('Blog'), blogController.getBlogByI
 router.post(
     '/',
     protect,
-    authorize('Admin', 'Content Manager', 'Blogger'),
-    upload.single('image'), // Enable image upload
+    authorize('Admin', 'Content Manager', 'Blogger', 'Super Admin'),
+    uploadImage.single('image'),
+    processBlogImage,
     blogController.createBlog
 );
 
@@ -24,7 +25,8 @@ router.put(
     decodeParam('id'),
     protect,
     checkBlogOwnership,
-    upload.single('image'), // Enable image upload on update
+    uploadImage.single('image'),
+    processBlogImage,
     blogController.updateBlog
 );
 

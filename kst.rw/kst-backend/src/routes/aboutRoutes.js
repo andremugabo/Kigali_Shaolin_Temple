@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { aboutController } = require('../controllers');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const { upload } = require('../middleware/uploadMiddleware');
+const { uploadImage, processAboutImage } = require('../middleware/uploadMiddleware');
 const { decodeParam } = require('../middleware/idMiddleware');
 
 router.get('/', aboutController.getAbout);
@@ -12,7 +12,8 @@ router.post(
     '/',
     protect,
     authorize('Admin', 'Super Admin'),
-    upload.single('image'),
+    uploadImage.single('image'),
+    processAboutImage,
     aboutController.createAbout
 );
 
@@ -21,7 +22,8 @@ router.put(
     decodeParam('id'),
     protect,
     authorize('Admin', 'Super Admin'),
-    upload.single('image'),
+    uploadImage.single('image'),
+    processAboutImage,
     aboutController.updateAbout
 );
 

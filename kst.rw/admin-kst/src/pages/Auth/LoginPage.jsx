@@ -41,8 +41,8 @@ const LoginPage = () => {
 
             <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
                 <div className="flex justify-center flex-col items-center">
-                    <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center text-white shadow-2xl border border-primary/50 transform rotate-12 hover:rotate-0 transition-transform duration-500">
-                        <Sword size={32} />
+                    <div className="w-24 h-24 bg-white rounded-3xl flex items-center justify-center shadow-2xl border border-white/20 transform rotate-6 hover:rotate-0 transition-transform duration-500 overflow-hidden p-2">
+                        <img src="/logo.png" alt="KST Logo" className="w-full h-full object-contain" />
                     </div>
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-white tracking-tight uppercase">
                         KST Management

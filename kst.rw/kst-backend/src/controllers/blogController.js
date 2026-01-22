@@ -56,6 +56,12 @@ const sanitizeBlog = (blog) => {
 const createBlog = async (req, res) => {
     try {
         const blogData = { ...req.body };
+
+        // Ensure userId is set from the authenticated user
+        if (req.user) {
+            blogData.userId = req.user.id;
+        }
+
         if (req.file) {
             blogData.image = req.file.path;
         }
@@ -182,6 +188,13 @@ const getBlogById = async (req, res) => {
 const updateBlog = async (req, res) => {
     try {
         const updateData = { ...req.body };
+
+        // Sanitize updateData: remove read-only and primary key fields
+        delete updateData.id;
+        delete updateData.userId;
+        delete updateData.created_at;
+        delete updateData.updated_at;
+
         // Check for new image
         if (req.file) {
             updateData.image = req.file.path;

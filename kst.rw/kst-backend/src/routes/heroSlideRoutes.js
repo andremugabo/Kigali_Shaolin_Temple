@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { heroSlideController } = require('../controllers');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const { upload } = require('../middleware/uploadMiddleware');
+const { uploadImage, processHeroSlide } = require('../middleware/uploadMiddleware');
 const { decodeParam } = require('../middleware/idMiddleware');
 
 router.get('/', heroSlideController.getAllSlides);
@@ -13,7 +13,8 @@ router.post(
     '/',
     protect,
     authorize('Admin', 'Content Manager', 'Super Admin'),
-    upload.single('image'),
+    uploadImage.single('image'),
+    processHeroSlide,
     heroSlideController.createSlide
 );
 
@@ -22,7 +23,8 @@ router.put(
     decodeParam('id'),
     protect,
     authorize('Admin', 'Content Manager', 'Super Admin'),
-    upload.single('image'),
+    uploadImage.single('image'),
+    processHeroSlide,
     heroSlideController.updateSlide
 );
 
