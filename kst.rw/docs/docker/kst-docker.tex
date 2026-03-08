@@ -1,0 +1,141 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\title{Kigali Shaolin Temple Management System: Dockerization Documentation}
+\author{KST Development Team}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This document describes the containerization of the Kigali Shaolin Temple (KST) Management System. The project is split into three main components: a backend API, a main frontend application, and an administrative dashboard. Docker is used to ensure environment consistency and simplify deployment.
+
+\section{Architecture Overview}
+The system architecture consists of four primary containers managed by Docker Compose:
+\begin{itemize}
+    \item \textbf{database}: A PostgreSQL 15 instance for persistent data storage.
+    \item \textbf{backend}: A Node.js Express server handling business logic and API requests.
+    \item \textbf{frontend}: The main user-facing React application served via Nginx.
+    \item \textbf{admin}: The administrative dashboard React application served via Nginx.
+\end{itemize}
+
+\section{Configuration}
+
+\subsection{Dockerfiles}
+Each component has a dedicated \texttt{Dockerfile}. The frontend components use multi-stage builds to optimize image size by separating the build environment from the production Nginx server.
+
+\subsection{Docker Compose}
+The \texttt{docker-compose.yml} file orchestrates the services. It defines networking, volume mapping for the database and backend uploads, and inter-service dependencies.
+
+\section{Running the Project}
+
+\subsection{Prerequisites}
+Ensure that the following software is installed on your host system:
+\begin{itemize}
+    \item \textbf{Docker Desktop} (or Docker Engine on Linux)
+    \item \textbf{Docker Compose} (V2 is recommended)
+\end{itemize}
+
+\subsection{Environment Setup}
+Before starting the containers, ensure that relevant environment variables are configured. You can create a \texttt{.env} file in the root directory or within each component folder. Key variables include:
+\begin{itemize}
+    \item \texttt{DB\_USER}, \texttt{DB\_PASSWORD}, \texttt{DB\_NAME}: PostgreSQL credentials.
+    \item \texttt{PORT}: Backend server port (default: 3005).
+    \item \texttt{API\_BASE\_URL}: Used by frontends to communicate with the API.
+\end{itemize}
+
+\subsection{Deployment Commands}
+To start the entire system and build images if they don't exist:
+
+\begin{lstlisting}[language=bash]
+docker-compose up --build
+\end{lstlisting}
+
+To run in \textbf{detached mode} (background):
+
+\begin{lstlisting}[language=bash]
+docker-compose up -d
+\end{lstlisting}
+
+\subsection{Management and Logs}
+To view logs for all services:
+
+\begin{lstlisting}[language=bash]
+docker-compose logs -f
+\end{lstlisting}
+
+To stop and remove all containers:
+
+\begin{lstlisting}[language=bash]
+docker-compose down
+\end{lstlisting}
+
+To execute a command (like running migrations or seeds) inside the backend:
+
+\begin{lstlisting}[language=bash]
+docker-compose run --rm backend npm run db:reset
+\end{lstlisting}
+
+\subsection{First-Time Setup (Database Initialization)}
+The first time you run the system, you must initialize the database schema and populate it with initial data (admin users, programs, etc.). Run the following command after the containers are up:
+
+\begin{lstlisting}[language=bash]
+docker-compose exec backend npm run db:reset
+\end{lstlisting}
+
+\begin{itemize}
+    \item \textbf{Warning}: This command resets the database. Only use it for first-time setup or when you explicitly want to wipe and restart the data.
+\end{itemize}
+
+\subsection{Accessing the Services}
+Once the containers are running, the services are available at:
+\begin{itemize}
+    \item \textbf{Main Frontend}: \texttt{http://localhost:8080}
+    \item \textbf{Admin Dashboard}: \texttt{http://localhost:8081}
+    \item \textbf{Backend API}: \texttt{http://localhost:3006} (Mapped to internal \texttt{3005})
+    \item \textbf{Database}: \texttt{localhost:5433} (Mapped to internal \texttt{5432})
+\end{itemize}
+
+\section{Troubleshooting: Port Conflicts}
+If you see an error like \texttt{bind: address already in use}, it means another service on your Mac (like a local PostgreSQL instance) is already using the port.
+\begin{itemize}
+    \item \textbf{DB Conflict}: We have mapped the host port to \texttt{5433} to avoid the default \texttt{5432}.
+    \item \textbf{Backend Conflict}: We have mapped the host port to \texttt{3006} to avoid the default \texttt{3005}. If port \texttt{3006} is also taken, adjust the first number in the \texttt{ports} section of \texttt{backend} in \texttt{docker-compose.yml}.
+    \item \textbf{Frontend Conflict}: If ports \texttt{8080} or \texttt{8081} are taken, adjust them in \texttt{docker-compose.yml} accordingly.
+\end{itemize}
+
+\section{Data Persistence}
+Database data is persisted using a Docker volume named \texttt{kst-db-data}. Backend uploads (images and videos) are mapped to the local \texttt{kst-backend/uploads} directory for easy management and persistence across container restarts.
+
+\end{document}

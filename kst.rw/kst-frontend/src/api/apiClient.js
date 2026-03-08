@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3005/api';
-const UPLOAD_BASE_URL = 'http://localhost:3005';
+console.log('📡 [Frontend API]: Base URL is:', import.meta.env.VITE_API_URL);
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+const UPLOAD_BASE_URL = import.meta.env.VITE_UPLOAD_URL || 'https://kst-backend.onrender.com';
 
 const apiClient = axios.create({
     baseURL: API_BASE_URL,

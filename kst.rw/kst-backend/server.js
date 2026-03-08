@@ -26,7 +26,14 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:80',
-  'http://localhost:3005'
+  'http://localhost:3005',
+  'http://localhost:8080',
+  'http://localhost:8081',
+  'http://127.0.0.1:8080',
+  'http://127.0.0.1:8081',
+  'https://kst-frontend.onrender.com',
+  'https://kst-backend.onrender.com',
+  'https://kst-admin.onrender.com'
 ];
 
 app.use(cors({

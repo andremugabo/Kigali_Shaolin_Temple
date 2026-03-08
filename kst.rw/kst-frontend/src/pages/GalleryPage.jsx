@@ -54,49 +54,74 @@ const GalleryPage = () => {
                     </p>
                 </div>
 
-                {/* Filters */}
-                <div className="flex flex-wrap justify-center gap-4 mb-20">
+                {/* Enhanced Filters */}
+                <div className="flex flex-wrap justify-center gap-4 md:gap-8 mb-24">
                     {categories.map((cat) => (
                         <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
-                            className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 border ${activeCategory === cat
-                                ? 'bg-gold text-dark border-gold shadow-[0_0_20px_rgba(201,162,77,0.4)]'
-                                : 'bg-white/5 text-white/40 border-white/10 hover:border-gold/30 hover:text-white'
+                            className={`group relative px-10 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-700 overflow-hidden border ${activeCategory === cat
+                                ? 'text-white border-primary/40 shadow-luxury'
+                                : 'text-white/40 border-white/5 hover:text-white'
                                 }`}
                         >
-                            {cat}
+                            <span className="relative z-10">{cat}</span>
+                            <div className={`absolute inset-0 bg-primary/20 transition-transform duration-700 ease-out translate-y-full group-hover:translate-y-[85%] ${activeCategory === cat ? 'translate-y-0 bg-primary/40' : ''}`} />
+                            {activeCategory === cat && (
+                                <div className="absolute bottom-0 left-0 w-full h-1 bg-primary animate-in fade-in slide-in-from-left duration-700" />
+                            )}
                         </button>
                     ))}
                 </div>
 
                 {/* Gallery Grid */}
-                <div ref={gridRef} className={`columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8 reveal-hidden ${gridVisible ? 'reveal-visible' : ''}`}>
+                <div ref={gridRef} className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 reveal-hidden ${gridVisible ? 'reveal-visible' : ''}`}>
                     {media.map((item) => (
                         <div
                             key={item.id}
                             onClick={() => setSelectedItem(item)}
-                            className="relative group cursor-pointer overflow-hidden rounded-[2rem] border border-white/5 hover:border-gold/30 transition-all duration-700 break-inside-avoid shadow-luxury"
+                            className="group relative cursor-pointer overflow-hidden rounded-[2.5rem] border border-white/5 hover:border-gold/40 transition-all duration-1000 shadow-luxury aspect-video bg-black/60"
                         >
-                            <img
-                                src={getMediaPath(item.mediaUrl)}
-                                alt={item.title}
-                                className="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-110"
-                            />
+                            {item.mediaType === 'VIDEO' ? (
+                                <video
+                                    src={getMediaPath(item.mediaUrl)}
+                                    className="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-105"
+                                    preload="metadata"
+                                    muted
+                                />
+                            ) : (
+                                <img
+                                    src={getMediaPath(item.mediaUrl)}
+                                    alt={item.title}
+                                    className="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-105"
+                                />
+                            )}
 
-                            <div className="absolute inset-0 bg-gradient-to-t from-dark/90 via-dark/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
-                                <div className="flex items-center space-x-3 text-gold/80 mb-3">
-                                    {item.mediaType === 'VIDEO' ? <Video size={18} /> : <ImageIcon size={18} />}
-                                    <span className="text-[10px] font-black uppercase tracking-widest">{item.category}</span>
+                            {/* Cinematic Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-dark/95 via-dark/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 flex flex-col justify-end p-10 transform translate-y-4 group-hover:translate-y-0">
+                                <div className="flex items-center space-x-4 text-gold/80 mb-4">
+                                    <div className="w-8 h-8 rounded-full glass-gold flex items-center justify-center">
+                                        {item.mediaType === 'VIDEO' ? <Video size={14} /> : <ImageIcon size={14} />}
+                                    </div>
+                                    <span className="text-[10px] font-black uppercase tracking-[0.3em]">{item.category}</span>
                                 </div>
-                                <h3 className="text-xl font-playfair font-black text-white italic truncate">{item.title}</h3>
+                                <h3 className="text-2xl md:text-3xl font-playfair font-black text-white italic leading-tight mb-2 drop-shadow-2xl">
+                                    {item.title}
+                                </h3>
+                                <p className="text-white/60 text-xs font-medium uppercase tracking-widest line-clamp-1">
+                                    {item.description || "View details"}
+                                </p>
                             </div>
 
+                            {/* Video Play Indicator */}
                             {item.mediaType === 'VIDEO' && (
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full glass-gold flex items-center justify-center text-white scale-0 group-hover:scale-100 transition-transform duration-500 shadow-2xl">
-                                    <Video size={24} />
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full glass-gold flex items-center justify-center text-white scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-700 shadow-[0_0_50px_rgba(201,162,77,0.4)]">
+                                    <Video size={28} className="fill-white" />
                                 </div>
                             )}
+
+                            {/* Decorative Corner */}
+                            <div className="absolute top-6 right-6 w-10 h-10 border-t-2 border-r-2 border-gold/0 group-hover:border-gold/40 transition-all duration-1000 rounded-tr-xl" />
                         </div>
                     ))}
                 </div>
@@ -104,73 +129,83 @@ const GalleryPage = () => {
                 {/* No Data State */}
                 {media.length === 0 && (
                     <div className="py-40 text-center">
-                        <div className="w-20 h-20 mx-auto bg-white/5 rounded-full flex items-center justify-center text-white/20 mb-8">
-                            <Filter size={32} />
+                        <div className="w-24 h-24 mx-auto bg-white/[0.03] rounded-full flex items-center justify-center text-white/10 mb-8 border border-white/5">
+                            <Filter size={40} strokeWidth={1} />
                         </div>
-                        <h2 className="text-2xl font-playfair font-black text-white italic mb-4">Gallery is Empty</h2>
-                        <p className="text-white/40 uppercase tracking-widest text-xs">No media found in this category.</p>
+                        <h2 className="text-3xl font-playfair font-black text-white italic mb-4">Gallery is Empty</h2>
+                        <p className="text-white/30 uppercase tracking-[0.4em] text-[10px]">No echoes found in this category.</p>
                     </div>
                 )}
             </div>
 
             {/* Lightbox / Modal */}
             {selectedItem && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 lg:p-20">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-20">
                     <div
-                        className="absolute inset-0 bg-dark/95 backdrop-blur-3xl"
+                        className="absolute inset-0 bg-dark/98 backdrop-blur-3xl animate-in fade-in duration-700"
                         onClick={() => setSelectedItem(null)}
                     />
 
-                    <div className="relative max-w-6xl w-full max-h-full overflow-hidden rounded-[3rem] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in duration-500 bg-black">
+                    <div className="relative max-w-7xl w-full max-h-full overflow-hidden rounded-[3.5rem] border border-white/10 shadow-[0_0_150px_rgba(0,0,0,0.8)] animate-in zoom-in-95 duration-700 bg-black flex flex-col lg:flex-row">
                         <button
                             onClick={() => setSelectedItem(null)}
-                            className="absolute top-8 right-8 z-10 w-12 h-12 rounded-full glass-gold flex items-center justify-center text-white hover:bg-primary transition-colors hover:rotate-90 duration-500"
+                            className="absolute top-10 right-10 z-[110] w-14 h-14 rounded-full glass-gold flex items-center justify-center text-white hover:bg-primary transition-all hover:rotate-90 duration-700 shadow-2xl active:scale-95"
                         >
-                            <X size={24} />
+                            <X size={28} />
                         </button>
 
-                        <div className="flex flex-col lg:flex-row h-full">
-                            <div className="lg:w-2/3 bg-black flex items-center justify-center overflow-hidden">
-                                {selectedItem.mediaType === 'VIDEO' ? (
-                                    <video
-                                        src={getMediaPath(selectedItem.mediaUrl)}
-                                        controls
-                                        className="w-full h-full object-contain"
-                                        autoPlay
-                                    />
-                                ) : (
-                                    <img
-                                        src={getMediaPath(selectedItem.mediaUrl)}
-                                        alt={selectedItem.title}
-                                        className="w-full h-full object-contain"
-                                    />
-                                )}
+                        <div className="lg:w-3/4 bg-black flex items-center justify-center overflow-hidden h-[50vh] lg:h-auto border-b lg:border-b-0 lg:border-r border-white/5">
+                            {selectedItem.mediaType === 'VIDEO' ? (
+                                <video
+                                    src={getMediaPath(selectedItem.mediaUrl)}
+                                    controls
+                                    className="w-full h-full object-contain"
+                                    autoPlay
+                                />
+                            ) : (
+                                <img
+                                    src={getMediaPath(selectedItem.mediaUrl)}
+                                    alt={selectedItem.title}
+                                    className="w-full h-full object-contain"
+                                />
+                            )}
+                        </div>
+
+                        <div className="lg:w-1/4 p-12 lg:p-16 flex flex-col justify-center bg-dark/40 relative overflow-hidden">
+                            {/* Decorative Background Icon */}
+                            <div className="absolute -top-10 -right-10 opacity-[0.03] rotate-12">
+                                <ImageIcon size={300} strokeWidth={1} />
                             </div>
 
-                            <div className="lg:w-1/3 p-12 lg:p-16 flex flex-col justify-center border-l border-white/5">
-                                <div className="flex items-center space-x-4 mb-8">
-                                    <div className="w-12 h-12 rounded-2xl glass-gold flex items-center justify-center text-gold">
-                                        <Calendar size={20} />
+                            <div className="relative z-10">
+                                <div className="flex items-center space-x-5 mb-12">
+                                    <div className="w-14 h-14 rounded-2xl glass-gold flex items-center justify-center text-gold shadow-luxury">
+                                        <Calendar size={24} />
                                     </div>
                                     <div>
-                                        <p className="text-white/30 font-bold uppercase tracking-[0.2em] text-[10px] mb-1">Date Captured</p>
-                                        <p className="text-white font-black tracking-wide">
+                                        <p className="text-white/30 font-bold uppercase tracking-[0.3em] text-[10px] mb-1">Date Captured</p>
+                                        <p className="text-white font-black tracking-wide text-lg">
                                             {new Date(selectedItem.eventDate || selectedItem.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                                         </p>
                                     </div>
                                 </div>
 
-                                <h3 className="text-4xl lg:text-5xl font-playfair font-black text-white mb-8 italic leading-tight">
+                                <h3 className="text-4xl lg:text-6xl font-playfair font-black text-white mb-10 italic leading-[1.1] text-glow">
                                     {selectedItem.title}
                                 </h3>
-                                <p className="text-white/50 text-lg leading-relaxed mb-12">
-                                    {selectedItem.description || "A moment captured within the temple, preserving our legacy for the future."}
-                                </p>
 
-                                <div className="pt-8 border-t border-white/5">
-                                    <span className="px-4 py-2 bg-primary/20 rounded-lg text-[10px] font-black uppercase tracking-widest text-primary border border-primary/20">
+                                <div className="relative mb-12">
+                                    <div className="absolute -left-6 top-0 w-1 h-full bg-primary/40 rounded-full" />
+                                    <p className="text-white/50 text-xl leading-relaxed font-medium italic">
+                                        {selectedItem.description || "A moment captured within the temple, preserving our legacy for the future generations of practitioners."}
+                                    </p>
+                                </div>
+
+                                <div className="pt-10 border-t border-white/10 flex flex-wrap gap-4">
+                                    <span className="px-6 py-3 bg-primary/10 rounded-xl text-[10px] font-black uppercase tracking-[0.3em] text-primary border border-primary/20 shadow-luxury">
                                         {selectedItem.category}
                                     </span>
+                                    <div className="flex-1" />
                                 </div>
                             </div>
                         </div>

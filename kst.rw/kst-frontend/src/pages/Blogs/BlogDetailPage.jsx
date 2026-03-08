@@ -87,7 +87,7 @@ const BlogDetailPage = () => {
                             </span>
                         </div>
 
-                        <h1 className="text-6xl md:text-8xl lg:text-9xl font-playfair font-black text-white text-glow italic leading-[1.1] mb-10 tracking-tighter">
+                        <h1 className="text-6xl md:text-8xl lg:text-5xl font-playfair font-black text-white text-glow italic leading-[1.1] mb-10 tracking-tighter">
                             {blog.title}
                         </h1>
 
