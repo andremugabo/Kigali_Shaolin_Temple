@@ -59,7 +59,8 @@
     \centering
     \vspace*{2cm}
     {\Huge \textbf{Kigali Shaolin Temple Management System}}\\[0.5cm]
-    {\Large Frontend Website, Admin Portal (CMS), and Backend API}\\[2cm]
+    {\Large Frontend Website, Admin Portal (CMS), and Backend API}\\[0.3cm]
+    {\large \textbf{Version 1.1.0}}\\[1.5cm]
     
     \textbf{Purpose:}\\
     A unified professional blueprint combining system analysis, UI/UX design,
@@ -337,12 +338,31 @@ The frontend communication layer is hardened with:
     \item \textbf{Response Interceptors}: Global handling of 401 Unauthorized errors with automatic cleanup and redirect to login.
     \item \textbf{Centralized Configuration}: Environment-based Base URL management for seamless dev/prod switching.
 \end{itemize}
+\subsection{Media Upload Architecture}
+The system supports two upload modes controlled by the \texttt{UPLOAD\_MODE} environment variable:
 
-Database:
-\begin{itemize}
-    \item PostgreSQL (Neon.tech)
-    \item Sequelize ORM
-\end{itemize}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Mode & Storage & Persistence \\
+\midrule
+\texttt{local} & Server filesystem (\texttt{/uploads}) & Ephemeral (lost on restart) \\
+\texttt{cloud} & Cloudinary CDN & Permanent \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Production Requirement}: Always use \texttt{UPLOAD\_MODE=cloud} with valid Cloudinary credentials on Render (and any platform with ephemeral storage), as local files are wiped on container restart.
+
+Cloudinary is configured once at module load in \texttt{uploadUtils.js}:
+\begin{lstlisting}[language=JavaScript]
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+\end{lstlisting}
+
 
 % ------------------------------------------------
 \section{Database Models}
@@ -438,12 +458,11 @@ The admin portal includes robust error handling and defensive programming practi
 The system is fully containerized using Docker, enabling consistent deployment and simplified environment management across development, testing, and production.
 
 \subsection{Container Services}
-The ecosystem consists of four orchestrated services defined in \texttt{docker-compose.yml}. These images are also available on Docker Hub under the \texttt{andremugabo} registry:
+The ecosystem consists of three orchestrated services. Production images are published on Docker Hub under the \texttt{andremugabo} registry with the \texttt{:prod} tag:
 \begin{itemize}
-    \item \textbf{kst-db}: PostgreSQL 15 database instance.
-    \item \textbf{kst-backend}: \texttt{andremugabo/kst-backend:latest} --- Node.js API with custom entrypoint for automatic DB synchronization and seeding.
-    \item \textbf{kst-frontend}: \texttt{andremugabo/kst-frontend:latest} --- Production-optimized public website served via Nginx.
-    \item \textbf{kst-admin}: \texttt{andremugabo/kst-admin:latest} --- Production-optimized CMS portal served via Nginx.
+    \item \textbf{kst-backend}: \texttt{andremugabo/kst-backend:prod} --- Node.js API with Cloudinary integration and custom entrypoint for DB synchronization and seeding.
+    \item \textbf{kst-frontend}: \texttt{andremugabo/kst-frontend:prod} --- Production-optimized public website served via Nginx.
+    \item \textbf{kst-admin}: \texttt{andremugabo/kst-admin:prod} --- Production-optimized CMS portal served via Nginx.
 \end{itemize}
 
 \subsection{Deployment Workflow}
@@ -453,17 +472,18 @@ docker compose up -d --build
 \end{lstlisting}
 
 \subsection{Production Build Commands}
-For production environments, the Frontend and Admin apps must be built with the live API URL:
+For production environments, the Frontend and Admin apps are built with the live API URL \textbf{and upload URL} baked in at build time (Vite resolves \texttt{import.meta.env} at build time, not runtime):
 \begin{lstlisting}[language=bash]
 cd kst.rw
+# Build and push all images (uses push-images.sh)
+bash push-images.sh
 
-# 1. Final Build for Frontend
-docker build --build-arg VITE_API_URL=https://kst-backend.onrender.com/api -t andremugabo/kst-frontend:prod ./kst-frontend
+# Manual example for Frontend:
+docker build \
+  --build-arg VITE_API_URL=https://kst-backend.onrender.com/api \
+  --build-arg VITE_UPLOAD_URL=https://kst-backend.onrender.com \
+  -t andremugabo/kst-frontend:prod ./kst-frontend
 docker push andremugabo/kst-frontend:prod
-
-# 2. Final Build for Admin
-docker build --build-arg VITE_API_URL=https://kst-backend.onrender.com/api -t andremugabo/kst-admin:prod ./admin-kst
-docker push andremugabo/kst-admin:prod
 \end{lstlisting}
 
 \subsection{SPA Routing and Nginx}
@@ -484,19 +504,66 @@ The backend container utilizes a dedicated \texttt{docker-entrypoint.sh} script 
 For production environments, the system is designed to be hosted on Render.com using their Infrastructure-as-Code (Blueprint) feature.
 
 \subsection{Render Blueprint (render.yaml)}
-A \texttt{render.yaml} file is provided in the root directory, which automatically provisions:
-\begin{itemize}
-    \item \textbf{Managed PostgreSQL}: A persistent, managed database instance.
-    \item \textbf{Web Services}: Three Docker-based services for the Backend, Admin Portal, and Public Frontend.
-\end{itemize}
+A \texttt{render.yaml} file is provided, which provisions all three web services using Docker images.
+Key environment variables for the backend:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Variable & Purpose \\
+\midrule
+\texttt{NODE\_ENV} & Set to \texttt{production} \\
+\texttt{DATABASE\_URL} & Neon.tech PostgreSQL connection string \\
+\texttt{BACKEND\_URL} & Public backend URL for file path construction \\
+\texttt{UPLOAD\_MODE} & \texttt{cloud} (required for persistence) \\
+\texttt{CLOUD\_NAME} & Cloudinary cloud name \\
+\texttt{API\_KEY} & Cloudinary API key \\
+\texttt{API\_SECRET} & Cloudinary API secret \\
+\texttt{JWT\_SECRET} & Auto-generated by Render \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Key environment variables for the frontend and admin:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Variable & Purpose \\
+\midrule
+\texttt{VITE\_API\_URL} & Backend API base URL \\
+\texttt{VITE\_UPLOAD\_URL} & Backend base URL for media resolution \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Note}: \texttt{VITE\_UPLOAD\_URL} must also be passed as a Docker \texttt{--build-arg} since Vite bakes environment variables at build time.
 
 \subsection{Production Data Safety}
 The system implements environment-aware startup logic. When \texttt{NODE\_ENV=production} is detected:
 \begin{itemize}
     \item Full database resets (\texttt{db:reset}) are disabled.
     \item Safe synchronization (\texttt{db:sync}) is performed using Sequelize's \texttt{alter: true} mode.
-    \item This ensures schema updates are applied without data loss.
+    \item The seeder (\texttt{seed.js}) runs in upsert mode --- it creates records if absent, and updates stale placeholder URLs if they already exist.
 \end{itemize}
+
+% ------------------------------------------------
+\section{Resolved Technical Issues (v1.1.0)}
+
+\begin{center}
+\begin{tabular}{p{5cm}p{9cm}}
+\toprule
+Issue & Resolution \\
+\midrule
+\texttt{ERR\_NAME\_NOT\_RESOLVED} for placeholder images & Replaced \texttt{via.placeholder.com} with \texttt{placehold.co} in seed data and all components \\
+Images disappear on page refresh & Root cause: \texttt{UPLOAD\_MODE=cloud} with placeholder Cloudinary credentials silently fell back to ephemeral local storage. Fixed by calling \texttt{cloudinary.config()} at module load and providing real credentials. \\
+Backend fails to start on Render & Removed hardcoded \texttt{PORT: 3005} from \texttt{render.yaml}; Render assigns ports dynamically. \\
+All API requests blocked by CORS & Service name mismatch between Render hostnames and \texttt{allowedOrigins} in \texttt{server.js}. Fixed by correcting the CORS list. \\
+Malformed image URLs & Fixed leading/trailing slash handling in \texttt{getMediaPath} in \texttt{apiClient.js}. \\
+No image URLs in production frontend & \texttt{VITE\_UPLOAD\_URL} was missing as a Docker \texttt{build-arg}; added to both Dockerfiles and \texttt{push-images.sh}. \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 % ------------------------------------------------
 \section{Non-Functional Requirements}

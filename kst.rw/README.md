@@ -2,10 +2,11 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)
 ![React](https://img.shields.io/badge/react-19.2.3-61DAFB.svg)
+![Docker](https://img.shields.io/badge/docker-hub-andremugabo-blue.svg)
 
 **A comprehensive full-stack management system for promoting Shaolin culture in Rwanda**
 
@@ -136,7 +137,10 @@ The system is hosted on **Render.com** with a **Neon.tech** database.
 - ⚡ **Backend API**: [https://kst-backend.onrender.com](https://kst-backend.onrender.com)
 - 🎛️ **Admin Portal**: [https://kst-admin.onrender.com](https://kst-admin.onrender.com)
 - 🌐 **Public Frontend**: [https://kst-frontend.onrender.com](https://kst-frontend.onrender.com)
-- 📖 **API Documentation**: [https://kst-backend.onrender.com/api-docs](https://kst-backend.onrender.com/api-docs)
+- 📖 **API Docs (Swagger)**: [https://kst-backend.onrender.com/api-docs](https://kst-backend.onrender.com/api-docs)
+
+> [!NOTE]
+> Hosted on Render **free tier** — services may spin down after 15 minutes of inactivity. The first request after inactivity may take ~30 seconds to cold-start. All media files are persisted via **Cloudinary** (not local disk).
 
 ### Database Schema
 - **Users**: Admin accounts with role-based permissions
@@ -212,33 +216,40 @@ npm run dev
 
 The admin portal will run on `http://localhost:5173`
 
-### 🐳 Docker Deployment (Recommended)
+### 🐳 Docker Deployment (Recommended for Production)
 
-The easiest way to run the entire ecosystem is using Docker4.  **Confirm**: Render will automatically detect the database, backend, and frontends. Click **Apply**.
+Pre-built production images are available on Docker Hub:
 
-For a detailed step-by-step walkthrough, see the [Render Deployment Guide](file:///Users/ntgr/.gemini/antigravity/brain/e56a9e74-16d4-4454-826b-f8fddd49bc71/render_guide.md).
+| Image | Tag | Purpose |
+|-------|-----|---------|
+| `andremugabo/kst-backend` | `:prod` | Node.js REST API |
+| `andremugabo/kst-frontend` | `:prod` | Public website (Nginx) |
+| `andremugabo/kst-admin` | `:prod` | Admin portal (Nginx) |
 
-> [!IMPORTANT]
+#### Build and Push Locally
+
+```bash
 cd kst.rw
 
-# Option 1: Build locally and start
-docker compose up -d --build
+# Build and push all 3 images to Docker Hub
+bash push-images.sh
+```
 
-# Option 2: Pull from Docker Hub (andremugabo)
-# The images are hosted at:
-# - andremugabo/kst-backend:latest
-# - andremugabo/kst-admin:latest
-# - andremugabo/kst-frontend:latest
+#### Run with Docker Compose (Local)
+
+```bash
+cd kst.rw
+docker compose up -d --build
 ```
 
 **Services mapped by Docker Compose:**
 - 🌐 **Public Frontend**: [http://localhost:8080](http://localhost:8080)
 - 🎛️ **Admin Portal**: [http://localhost:8081](http://localhost:8081)
 - ⚡ **Backend API**: [http://localhost:3005](http://localhost:3005)
-- 🗄️ **PostgreSQL**: `localhost:5433`
 
 > [!TIP]
-> The backend container includes a `docker-entrypoint.sh` that automatically runs `npm run db:reset` on startup, ensuring the database is always synchronized and seeded with default admin credentials.
+> The backend container runs `docker-entrypoint.sh` on startup. In `production` mode it runs `db:sync` and `seed.js`. In `development` mode it runs `db:reset` (full reset + seed).
+
 
 ---
 
@@ -248,43 +259,54 @@ docker compose up -d --build
 
 ```env
 # Server
-PORT=3005
-NODE_ENV=development
+NODE_ENV=production
 
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=kst_db
-DB_USER=postgres
-DB_PASSWORD=your_password
+# Database (Neon.tech)
+DATABASE_URL=postgresql://user:pass@host/dbname?sslmode=require
 
 # JWT
 JWT_SECRET=your_super_secret_jwt_key_min_32_characters
-JWT_EXPIRES_IN=1d
 
-# Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
+# Backend public URL (used to construct absolute upload paths in local mode)
+BACKEND_URL=https://kst-backend.onrender.com
+
+# Upload mode: 'local' (ephemeral, for development) or 'cloud' (Cloudinary, recommended for production)
+UPLOAD_MODE=cloud
+
+# Cloudinary (required when UPLOAD_MODE=cloud)
+CLOUD_NAME=your_cloud_name
+API_KEY=your_cloudinary_api_key
+API_SECRET=your_cloudinary_api_secret
 
 # Email (SMTP)
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=your_email@gmail.com
-EMAIL_PASSWORD=your_app_password
+EMAIL_PASS=your_app_password
 
-# Frontend URL (for password reset links)
-FRONTEND_URL=http://localhost:5173
-
-# CORS
-ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
+# CORS — allowed origins
+FRONTEND_URL=https://kst-frontend.onrender.com
+ADMIN_URL=https://kst-admin.onrender.com
 ```
 
-### Frontend Environment Variables (`.env`)
+### Frontend & Admin Environment Variables (`.env`)
 
 ```env
-VITE_API_URL=http://localhost:3005
+# API base URL
+VITE_API_URL=http://localhost:3005/api
+
+# Base URL of backend (for media/image resolution)
+VITE_UPLOAD_URL=http://localhost:3005
 ```
+
+> [!IMPORTANT]
+> `VITE_UPLOAD_URL` **must** be set as a Docker build argument when building production images, since Vite bakes env vars at build time:
+> ```bash
+> docker build \
+>   --build-arg VITE_API_URL=https://kst-backend.onrender.com/api \
+>   --build-arg VITE_UPLOAD_URL=https://kst-backend.onrender.com \
+>   -t andremugabo/kst-frontend:prod ./kst-frontend
+> ```
 
 ---
 
@@ -517,31 +539,60 @@ npm test
 
 ## 🚢 Deployment
 
-# Deploy
-git push heroku main
-```
+### Production Deployment on Render (Docker Image)
 
-### Production Deployment (Render + Neon)
+The system deploys via pre-built Docker images stored on Docker Hub:
 
-The system is optimized for **Render** using specialized Docker images:
-
-1. **Database**: Hosted on [Neon.tech](https://neon.tech) (PostgreSQL).
-2. **Backend**: Deployed as a Web Service using `andremugabo/kst-backend:latest`.
-3. **Frontend/Admin**: Built with the live API URL:
-   ```bash
-   docker build --build-arg VITE_API_URL=https://kst-backend.onrender.com/api -t andremugabo/kst-frontend:prod ./kst-frontend
-   ```
-
-### Frontend Deployment (Example: Vercel)
-
+**Step 1 — Build & push images**
 ```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-cd kst.rw/admin-kst
-vercel
+cd kst.rw
+bash push-images.sh
 ```
+
+**Step 2 — Deploy on Render**
+
+Option A: Use `render.yaml` Blueprint
+1. Go to Render Dashboard → **Blueprints** → **New Blueprint Instance**
+2. Connect your GitHub repo — Render will read `render.yaml` automatically
+3. Click **Apply** to deploy all three services
+
+Option B: Manual service creation per service using the Docker image URLs:
+- `andremugabo/kst-backend:prod`
+- `andremugabo/kst-frontend:prod`
+- `andremugabo/kst-admin:prod`
+
+**Step 3 — Set environment variables on Render**
+
+For `kst-backend`, set these in Render's **Environment** tab:
+
+| Variable | Value |
+|----------|-------|
+| `NODE_ENV` | `production` |
+| `DATABASE_URL` | Neon.tech connection string |
+| `JWT_SECRET` | Random secret (32+ chars) |
+| `BACKEND_URL` | `https://kst-backend.onrender.com` |
+| `UPLOAD_MODE` | `cloud` |
+| `CLOUD_NAME` | Your Cloudinary cloud name |
+| `API_KEY` | Your Cloudinary API key |
+| `API_SECRET` | Your Cloudinary API secret |
+
+For `kst-frontend` and `kst-admin`, set:
+
+| Variable | Value |
+|----------|-------|
+| `VITE_API_URL` | `https://kst-backend.onrender.com/api` |
+| `VITE_UPLOAD_URL` | `https://kst-backend.onrender.com` |
+
+> [!WARNING]
+> Render free tier uses **ephemeral storage** — any files saved locally are wiped on restart. Always use `UPLOAD_MODE=cloud` with valid Cloudinary credentials in production to persist images.
+
+### CI/CD via GitHub Actions
+
+An automated pipeline in `.github/workflows/deploy.yml` runs on every push to `main`:
+1. Builds all three Docker images with correct build arguments
+2. Pushes `andremugabo/kst-backend:prod`, `kst-frontend:prod`, and `kst-admin:prod` to Docker Hub
+3. Triggers Render deploy hooks to pull the new images
+
 
 ---
 
@@ -632,6 +683,11 @@ We welcome contributions! Please follow these steps:
 - ✅ Database schema standardization
 - ✅ Frontend pagination crashes
 - ✅ Double-slash in API URLs
+- ✅ `ERR_NAME_NOT_RESOLVED` for placeholder images (switched to `placehold.co`)
+- ✅ Images disappearing on page refresh (root cause: `UPLOAD_MODE=cloud` with invalid Cloudinary credentials silently fell back to ephemeral local storage; fixed by initializing `cloudinary.config()` at module load and ensuring real credentials are set)
+- ✅ Backend failing to start on Render (hardcoded `PORT: 3005` in `render.yaml` conflicted with Render's dynamic port assignment)
+- ✅ CORS blocking all frontend requests (service name mismatch between `allowedOrigins` in `server.js` and actual Render service hostnames)
+- ✅ `getMediaPath` producing malformed URLs (fixed trailing/leading slash handling in `apiClient.js`)
 
 ### Open Issues
 - None currently

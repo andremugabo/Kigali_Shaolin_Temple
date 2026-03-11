@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.23)  8 MAR 2026 19:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2025.1.23)  11 MAR 2026 23:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -448,7 +448,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.34 ...astructure and Deployment}{12}{section.10}
+l.34 ...tability Enhancements}{12}{subsection.9.6}
                                                   % [1])
 \tf@toc=\write4
 \openout4 = `kigali_shaolin_temple_management_system.toc'.
@@ -464,7 +464,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [2]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 9
-8.
+9.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
@@ -523,7 +523,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [8]
-Overfull \hbox (5.18552pt too wide) in paragraph at lines 338--339
+Overfull \hbox (5.18552pt too wide) in paragraph at lines 339--340
 []\T1/cmr/bx/n/12 Centralized Con-fig-u-ra-tion\T1/cmr/m/n/12 : Environment-bas
 ed Base URL man-age-ment for seam-
  []
@@ -532,7 +532,7 @@ ed Base URL man-age-ment for seam-
 File: lstlang1.sty 2024/02/21 1.10 listings language file
 )
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 351.
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 371.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -560,13 +560,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[11]
-Overfull \hbox (2.22774pt too wide) in paragraph at lines 445--446
-[]\T1/cmr/bx/n/12 kst-frontend\T1/cmr/m/n/12 : \T1/cmtt/m/n/12 andremugabo/kst-
-frontend:latest \T1/cmr/m/n/12 --- Production-optimized pub-
- []
-
-(/usr/local/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
+[11] (/usr/local/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2024/02/21 1.10 listings language file
 )
 (/usr/local/texlive/2024/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -590,6 +584,53 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [13]
+Underfull \hbox (badness 10000) in paragraph at lines 558--558
+[]|\T1/cmtt/m/n/12 ERR_NAME_NOT_RESOLVED
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 558--559
+[]|\T1/cmr/m/n/12 Replaced \T1/cmtt/m/n/12 via.placeholder.com \T1/cmr/m/n/12 w
+ith
+ []
+
+
+Underfull \hbox (badness 2735) in paragraph at lines 558--559
+\T1/cmtt/m/n/12 placehold.co \T1/cmr/m/n/12 in seed data and all com-po-
+ []
+
+
+Underfull \hbox (badness 1715) in paragraph at lines 559--560
+[]|\T1/cmr/m/n/12 Root cause: \T1/cmtt/m/n/12 UPLOAD_MODE=cloud \T1/cmr/m/n/12 
+with place-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 560--561
+[]|\T1/cmr/m/n/12 Removed hard-coded \T1/cmtt/m/n/12 PORT: 3005 \T1/cmr/m/n/12 
+from
+ []
+
+
+Underfull \hbox (badness 3375) in paragraph at lines 560--561
+\T1/cmtt/m/n/12 render.yaml\T1/cmr/m/n/12 ; Ren-der as-signs ports dy-nam-i-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 562--563
+[]|\T1/cmr/m/n/12 Fixed lead-ing/-trail-ing slash han-dling in
+ []
+
+
+Underfull \hbox (badness 4621) in paragraph at lines 563--564
+[]|\T1/cmtt/m/n/12 VITE_UPLOAD_URL \T1/cmr/m/n/12 was miss-ing as a Docker
+ []
+
+
+Underfull \hbox (badness 4543) in paragraph at lines 563--564
+\T1/cmtt/m/n/12 build-arg\T1/cmr/m/n/12 ; added to both Dock-er-files and
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -598,21 +639,39 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[14] (./kigali_shaolin_temple_management_system.aux)
+[14]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[15]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[16] (./kigali_shaolin_temple_management_system.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `kigali_shaolin_temple_management_system.out'
  has not changed.
-(rerunfilecheck)             Checksum: 13E1DB09A969E23B0E7979FC052651DA;7227.
+(rerunfilecheck)             Checksum: C38442F6A330FE43DFE15694906924B0;7837.
  ) 
 Here is how much of TeX's memory you used:
- 12516 strings out of 474116
- 189181 string characters out of 5743682
- 2027187 words of memory out of 5000000
- 34624 multiletter control sequences out of 15000+600000
- 568712 words of font info for 57 fonts, out of 8000000 for 9000
+ 12570 strings out of 474116
+ 189855 string characters out of 5743682
+ 2061187 words of memory out of 5000000
+ 34655 multiletter control sequences out of 15000+600000
+ 569028 words of font info for 58 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,12n,79p,338b,2208s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
@@ -621,16 +680,17 @@ Here is how much of TeX's memory you used:
 sr/local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr
 /local/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/l
 ocal/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx2488.pfb></usr/loc
-al/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local
-/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/local/t
-exlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/tex
-live/2024/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texli
-ve/2024/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
-Output written on kigali_shaolin_temple_management_system.pdf (15 pages, 257419
+al/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfit1095.pfb></usr/local
+/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/t
+exlive/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1440.pfb></usr/local/tex
+live/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/texli
+ve/2024/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive
+/2024/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb>
+Output written on kigali_shaolin_temple_management_system.pdf (17 pages, 289784
  bytes).
 PDF statistics:
- 419 PDF objects out of 1000 (max. 8388607)
- 375 compressed objects within 4 object streams
- 106 named destinations out of 1000 (max. 500000)
- 345 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 473 PDF objects out of 1000 (max. 8388607)
+ 424 compressed objects within 5 object streams
+ 128 named destinations out of 1000 (max. 500000)
+ 369 words of extra memory for PDF output out of 10000 (max. 10000000)
 
