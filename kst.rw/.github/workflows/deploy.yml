@@ -23,7 +23,7 @@ jobs:
         with:
           context: ./kst-backend
           push: true
-          tags: andremugabo/kst-backend:latest
+          tags: andremugabo/kst-backend:prod
 
       # Build and push Frontend
       - name: Build and push Frontend
@@ -31,7 +31,7 @@ jobs:
         with:
           context: ./kst-frontend
           push: true
-          tags: andremugabo/kst-frontend:latest
+          tags: andremugabo/kst-frontend:prod
 
       # Build and push Admin
       - name: Build and push Admin
@@ -39,7 +39,7 @@ jobs:
         with:
           context: ./admin-kst
           push: true
-          tags: andremugabo/kst-admin:latest
+          tags: andremugabo/kst-admin:prod
 
       # Trigger Render Deploy Hooks
       - name: Trigger Backend Deploy

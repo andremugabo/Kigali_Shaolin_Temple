@@ -36,7 +36,7 @@ services:
     name: kst-frontend-public
     runtime: image
     image:
-      url: andremugabo/kst-frontend:latest
+      url: andremugabo/kst-frontend:prod
     plan: free
     envVars:
       - key: VITE_API_URL
