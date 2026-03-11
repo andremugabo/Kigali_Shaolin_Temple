@@ -1,0 +1,536 @@
+\documentclass[12pt,a4paper]{article}
+
+% ------------------ PACKAGES ------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={const, let, var, function, return, if, else, for, while, break, continue, new},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{purple}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+
+% ------------------ PAGE SETUP ------------------
+\geometry{margin=1in}
+\onehalfspacing
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Kigali Shaolin Temple Management System}
+\fancyhead[R]{System Blueprint}
+\fancyfoot[C]{\thepage}
+
+% ------------------ CODE STYLE ------------------
+\definecolor{codegray}{gray}{0.95}
+\lstset{
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\small,
+  frame=single,
+  breaklines=true
+}
+
+% ------------------ DOCUMENT ------------------
+\begin{document}
+
+% ------------------ TITLE PAGE ------------------
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge \textbf{Kigali Shaolin Temple Management System}}\\[0.5cm]
+    {\Large Frontend Website, Admin Portal (CMS), and Backend API}\\[2cm]
+    
+    \textbf{Purpose:}\\
+    A unified professional blueprint combining system analysis, UI/UX design,
+    CMS control, and backend logic.\\[1.5cm]
+    
+    \vfill
+    {\large \textbf{Prepared for:} Technical Documentation}\\
+    {\large \textbf{Year:} 2025}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ------------------------------------------------
+\section{General Project Overview}
+
+\textbf{Project Name:} Kigali Shaolin Temple Management System
+
+\textbf{Purpose:}  
+To promote Shaolin culture in Rwanda, manage clubs, programs, blogs, and allow administrators
+to dynamically control website content through a secure Content Management System (CMS).
+
+This document serves as a master reference for:
+\begin{itemize}
+    \item System development
+    \item Technical documentation
+    \item Project proposal or defense
+    \item Team onboarding
+\end{itemize}
+
+% ------------------------------------------------
+\section{System Architecture}
+
+The system follows a modern, scalable, production-ready architecture.
+
+\begin{verbatim}
+[ Frontend (React + Vite) ]
+            |
+         REST API
+            |
+[ Backend (Node.js + Express) ]
+            |
+[ Admin Portal (CMS Dashboard) ]
+            |
+[ Database (PostgreSQL + Sequelize) ]
+\end{verbatim}
+
+\subsection*{Architecture Description}
+\begin{itemize}
+    \item Frontend: Public-facing website for visitors
+    \item Admin Portal: Secure CMS for content management
+    \item Backend API: Business logic, authentication, and data access
+    \item Database: Persistent storage
+\end{itemize}
+
+% ------------------------------------------------
+\section{Branding and UI Design System (Tailwind)}
+
+\subsection{Color Palette}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Role & Color \\
+\midrule
+Primary & \#7B1E1E (Shaolin Red) \\
+Dark & \#111111 \\
+Accent & \#C9A24D (Heritage Gold) \\
+Text & \#FFFFFF \\
+Muted & \#9CA3AF \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Tailwind Configuration}
+\begin{lstlisting}[language=JavaScript]
+extend: {
+  colors: {
+    primary: '#7B1E1E',
+    dark: '#0A0A0A',
+    gold: '#C4A747',
+  }
+}
+\end{lstlisting}
+
+\subsection{Design Aesthetics (Premium Matrix)}
+The system employs a high-end visual language referred to as the "Premium Matrix" aesthetic:
+\begin{itemize}
+    \item \textbf{Glassmorphism}: Interactive cards use \texttt{bg-white/70 backdrop-blur-xl} for a modern, layered feel.
+    \item \textbf{Cinematic Overlays}: Hero sections and media displays use deep gradients and subtle glows.
+    \item \textbf{Premium Shadows}: Custom shadows (\texttt{shadow-premium}) provide depth without clutter.
+    \item \textbf{Interactive Micro-animations}: Smooth hover effects and transitions are applied globally.
+\end{itemize}
+
+\subsection{Typography}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Usage & Font \\
+\midrule
+Headings & Playfair Display (Serif) \\
+Body Text & Inter / Poppins (Sans-serif) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ------------------------------------------------
+\section{Frontend Website (Public)}
+
+\subsection{Design Goals}
+\begin{itemize}
+    \item Cinematic visuals
+    \item Martial arts strength and discipline
+    \item Traditional yet modern appearance
+    \item Fully CMS-driven content
+    \item Mobile-first responsiveness
+\end{itemize}
+
+% ------------------------------------------------
+\section{Frontend Pages and Sections}
+
+\subsection{Header and Navigation}
+\begin{itemize}
+    \item Logo
+    \item Navigation: Home, About, Blog, Clubs, Contact
+    \item Language switcher (RW / EN / FR)
+\end{itemize}
+
+CMS Control: None (static navigation)
+
+\subsection{Hero Section}
+\begin{itemize}
+    \item Full-screen background image
+    \item Dark overlay
+    \item Title, subtitle, CTA button
+    \item Carousel slider
+\end{itemize}
+
+CMS Controlled:
+\begin{itemize}
+    \item Title and subtitle
+    \item Background images
+    \item Button text and link
+\end{itemize}
+
+\subsection{About Us Section}
+\begin{itemize}
+    \item Image and text layout
+    \item Founder quotation
+\end{itemize}
+
+CMS Controlled:
+\begin{itemize}
+    \item About text
+    \item Founder name
+    \item Images
+    \item Year founded
+\end{itemize}
+
+\subsection{Programs and Training}
+\begin{itemize}
+    \item Online Training
+    \item In-Person Training
+    \item Global Retreats
+\end{itemize}
+
+Each program contains:
+\begin{itemize}
+    \item Image
+    \item Title
+    \item Description
+    \item Status (active or inactive)
+\end{itemize}
+
+\subsection{Blogs}
+\begin{itemize}
+    \item Featured blog
+    \item Blog listing
+    \item Blog detail page
+\end{itemize}
+
+\subsection{Clubs}
+\begin{itemize}
+    \item Club name
+    \item Location
+    \item Instructor
+    \item Description
+    \item Images
+\end{itemize}
+
+\subsection{Contact Us}
+\begin{itemize}
+    \item Name
+    \item Email
+    \item Message
+\end{itemize}
+
+\subsection{Gallery}
+\begin{itemize}
+    \item Photo and video media
+    \item Categorization by event
+    \item Date and title metadata
+\end{itemize}
+
+Backend Requirements:
+\begin{itemize}
+    \item Message storage
+    \item Admin replies
+    \item Email notifications
+\end{itemize}
+
+% ------------------------------------------------
+\section{Admin Portal (CMS Dashboard)}
+
+\subsection{Authentication and Roles}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Role & Description \\
+\midrule
+Super Admin & Complete system control and audit access \\
+Content Manager & Global content management across all modules \\
+Blogger & Focused access: creation and management of own blogs \\
+Editor & Standard content editing and review \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Dashboard Modules}
+\begin{itemize}
+    \item Dashboard overview and system statistics
+    \item Homepage (Hero Slides) manager
+    \item About manager
+    \item Programs manager
+    \item Blog manager
+    \item Clubs and Tutorials manager
+    \item Gallery (Media) manager
+    \item Messages manager
+    \item Audit Logs (Activity tracking)
+    \item Language manager
+    \item Users and roles
+\end{itemize}
+
+% ------------------------------------------------
+\section{Backend (API and Logic)}
+
+\subsection{Core Responsibilities}
+\begin{itemize}
+    \item Authentication and authorization using JWT
+    \item Content APIs
+    \item Image uploads
+    \item Email services
+    \item Role-based access control
+\end{itemize}
+
+\subsection{Technology Stack}
+
+Backend:
+\begin{itemize}
+    \item Node.js with Express
+    \item JWT authentication and Authorization middleware
+    \item Multer and Cloudinary for media storage
+    \item Nodemailer for email invitations and password resets
+    \item Swagger (OpenAPI) for interactive API documentation
+    \item Audit Logging for administrative actions
+    \item \textbf{API Resilience}: Centralized \texttt{apiClient.js} implementation
+\end{itemize}
+
+\subsection{API Interceptors and Security}
+The frontend communication layer is hardened with:
+\begin{itemize}
+    \item \textbf{Request Interceptors}: Automatic injection of JWT Bearer tokens from local storage.
+    \item \textbf{Response Interceptors}: Global handling of 401 Unauthorized errors with automatic cleanup and redirect to login.
+    \item \textbf{Centralized Configuration}: Environment-based Base URL management for seamless dev/prod switching.
+\end{itemize}
+
+Database:
+\begin{itemize}
+    \item PostgreSQL (Neon.tech)
+    \item Sequelize ORM
+\end{itemize}
+
+% ------------------------------------------------
+\section{Database Models}
+
+\begin{lstlisting}[language=SQL]
+User(id, name, email, password, role, image, reset_token, created_at)
+
+HeroSlide(id, title, subtitle, image, button_text, button_link)
+
+About(id, content, founder_name, image)
+
+Program(id, name, description, image, status)
+
+Blog(id, title, content, image, category, published, created_at)
+
+Club(id, name, description, location, image)
+
+ClubTutorial(id, club_id, title, video_url)
+
+Gallery(id, title, description, url, media_type, event_date, category)
+
+ContactMessage(id, name, email, message, read, created_at)
+
+AuditLog(id, user_id, action, entity, entity_id, details, ip_address)
+\end{lstlisting}
+
+% ------------------------------------------------
+\section{Advanced System Features}
+
+\subsection{Audit Logging}
+All administrative actions (Create, Update, Delete, Restore) are logged in the system. Each log entry captures:
+\begin{itemize}
+    \item The administrator who performed the action
+    \item The type of action and the entity affected
+    \item A timestamp and the administrator's IP address
+\end{itemize}
+
+\subsection{Data Recovery and Soft Deletes}
+The system implements soft deletes (paranoid mode), allowing administrators to restore accidentally deleted content. Permanent deletion is only possible through a deliberate "Force Delete" action.
+
+\subsection{Interactive API Documentation}
+The backend includes a Swagger (OpenAPI) interface, providing real-time documentation and a testing environment for all API endpoints.
+
+\subsection{ID Obfuscation (UUID Encryption)}
+To enhance security and prevent exposure of internal database structure, the system implements ID obfuscation using Base64URL encoding:
+
+\begin{itemize}
+    \item All public-facing UUIDs are encoded using Base64URL (URL-safe encryption)
+    \item Backend transparently decodes obfuscated IDs via middleware
+    \item Prevents enumeration attacks and information disclosure
+    \item Maintains backward compatibility with existing UUID structure
+\end{itemize}
+
+Implementation:
+\begin{lstlisting}[language=JavaScript]
+// Encoding: UUID -> Base64URL
+const encodeUUID = (uuid) => {
+  const hex = uuid.replace(/-/g, '');
+  const buffer = Buffer.from(hex, 'hex');
+  return buffer.toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+};
+
+// Decoding middleware applied to all routes
+router.get('/:id', decodeParam('id'), controller.getById);
+\end{lstlisting}
+
+\subsection{Database Schema Standardization}
+All Sequelize models have been standardized with explicit $snake_cas$e timestamp mappings to ensure database consistency:
+
+\begin{itemize}
+    \item Explicit mapping: \texttt{createdAt: '$created_at$', updatedAt: '$updated_at$'}
+    \item Resolves Sequelize ordering and query inconsistencies
+    \item Prevents 500 Internal Server Errors from column name mismatches
+    \item Applied to all models: Club, Program, Gallery, About, HeroSlide, User, Blog, ContactMessage, AuditLog
+\end{itemize}
+
+\subsection{Frontend Stability Enhancements}
+The admin portal includes robust error handling and defensive programming practices:
+
+\begin{itemize}
+    \item Optional chaining for safe property access (\texttt{pagination?.totalItems})
+    \item Default values for undefined data states
+    \item Pagination protection against crashes during network latency
+    \item Error boundaries for graceful degradation
+\end{itemize}
+
+% ------------------------------------------------
+\section{Docker Infrastructure and Deployment}
+
+The system is fully containerized using Docker, enabling consistent deployment and simplified environment management across development, testing, and production.
+
+\subsection{Container Services}
+The ecosystem consists of four orchestrated services defined in \texttt{docker-compose.yml}. These images are also available on Docker Hub under the \texttt{andremugabo} registry:
+\begin{itemize}
+    \item \textbf{kst-db}: PostgreSQL 15 database instance.
+    \item \textbf{kst-backend}: \texttt{andremugabo/kst-backend:latest} --- Node.js API with custom entrypoint for automatic DB synchronization and seeding.
+    \item \textbf{kst-frontend}: \texttt{andremugabo/kst-frontend:latest} --- Production-optimized public website served via Nginx.
+    \item \textbf{kst-admin}: \texttt{andremugabo/kst-admin:latest} --- Production-optimized CMS portal served via Nginx.
+\end{itemize}
+
+\subsection{Deployment Workflow}
+The entire stack can be initialized with a single command:
+\begin{lstlisting}[language=bash]
+docker compose up -d --build
+\end{lstlisting}
+
+\subsection{Production Build Commands}
+For production environments, the Frontend and Admin apps must be built with the live API URL:
+\begin{lstlisting}[language=bash]
+cd kst.rw
+
+# 1. Final Build for Frontend
+docker build --build-arg VITE_API_URL=https://kst-backend.onrender.com/api -t andremugabo/kst-frontend:prod ./kst-frontend
+docker push andremugabo/kst-frontend:prod
+
+# 2. Final Build for Admin
+docker build --build-arg VITE_API_URL=https://kst-backend.onrender.com/api -t andremugabo/kst-admin:prod ./admin-kst
+docker push andremugabo/kst-admin:prod
+\end{lstlisting}
+
+\subsection{SPA Routing and Nginx}
+
+Both the Admin Portal and Frontend are configured with a custom Nginx configuration to support Single Page Application (SPA) routing, ensuring that all deep-linked URLs correctly resolve to \texttt{index.html}.
+
+\subsection{Automated Initialization}
+The backend container utilizes a dedicated \texttt{docker-entrypoint.sh} script that:
+\begin{enumerate}
+    \item Waits for the database service to be healthy.
+    \item Runs \texttt{npm run db:reset} to synchronize models and seed initial administrative users.
+    \item Starts the production Express server.
+\end{enumerate}
+
+% ------------------------------------------------
+\section{Production Hosting (Render.com)}
+
+For production environments, the system is designed to be hosted on Render.com using their Infrastructure-as-Code (Blueprint) feature.
+
+\subsection{Render Blueprint (render.yaml)}
+A \texttt{render.yaml} file is provided in the root directory, which automatically provisions:
+\begin{itemize}
+    \item \textbf{Managed PostgreSQL}: A persistent, managed database instance.
+    \item \textbf{Web Services}: Three Docker-based services for the Backend, Admin Portal, and Public Frontend.
+\end{itemize}
+
+\subsection{Production Data Safety}
+The system implements environment-aware startup logic. When \texttt{NODE\_ENV=production} is detected:
+\begin{itemize}
+    \item Full database resets (\texttt{db:reset}) are disabled.
+    \item Safe synchronization (\texttt{db:sync}) is performed using Sequelize's \texttt{alter: true} mode.
+    \item This ensures schema updates are applied without data loss.
+\end{itemize}
+
+% ------------------------------------------------
+\section{Non-Functional Requirements}
+
+\begin{itemize}
+    \item Mobile-first responsive design
+    \item Search engine optimization
+    \item Secure admin routes
+    \item Optimized images
+    \item Fast loading performance
+\end{itemize}
+
+% ------------------------------------------------
+\section{Final Summary}
+
+The Kigali Shaolin Temple Management System consists of three integrated layers:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Layer & Role & Live URL \\
+\midrule
+Frontend & Public Website & \href{https://kst-frontend.onrender.com}{kst-frontend.onrender.com} \\
+Admin Portal & CMS Dashboard & \href{https://kst-admin.onrender.com}{kst-admin.onrender.com} \\
+Backend & API Engine & \href{https://kst-backend.onrender.com}{kst-backend.onrender.com} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This design:
+\begin{itemize}
+    \item Covers the majority of UI requirements from the provided design
+    \item Uses Tailwind CSS for a modern and professional interface
+    \item Enables scalability through CMS control
+\end{itemize}
+
+\end{document}
