@@ -10,7 +10,7 @@ services:
     name: kst-backend
     runtime: image
     image:
-      url: andremugabo/kst-backend:latest
+      url: andremugabo/kst-backend:prod
     plan: free
     envVars:
       - key: NODE_ENV
@@ -20,20 +20,21 @@ services:
         value: postgresql://neondb_owner:npg_hJdj0ZKqgR5v@ep-fragrant-firefly-ahhqfjb9-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
       - key: JWT_SECRET
         generateValue: true
-      - key: PORT
-        value: 3005
+      - key: BACKEND_URL
+        value: https://kst-backend.onrender.com
+      # Cloudinary - persistent image storage
       - key: UPLOAD_MODE
         value: cloud
       - key: CLOUD_NAME
-        value: your_cloud_name
+        value: dteiwjwwn
       - key: API_KEY
-        value: your_api_key
+        value: "766782647789835"
       - key: API_SECRET
-        value: your_api_secret
+        value: rRcKsOwU7yvrzf91EMCpelESzmQ
 
   # 2. Public Frontend
   - type: web
-    name: kst-frontend-public
+    name: kst-frontend
     runtime: image
     image:
       url: andremugabo/kst-frontend:prod
@@ -41,14 +42,18 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://kst-backend.onrender.com/api
+      - key: VITE_UPLOAD_URL
+        value: https://kst-backend.onrender.com
 
   # 3. Admin Portal
   - type: web
-    name: kst-admin-portal
+    name: kst-admin
     runtime: image
     image:
-      url: andremugabo/kst-admin:latest
+      url: andremugabo/kst-admin:prod
     plan: free
     envVars:
       - key: VITE_API_URL
         value: https://kst-backend.onrender.com/api
+      - key: VITE_UPLOAD_URL
+        value: https://kst-backend.onrender.com

@@ -4,6 +4,7 @@ import { fetchPrograms, deleteProgram } from '../../store/slices/programSlice';
 import { Button, Table, Modal } from '../../components/Shared';
 import { Plus, Edit, Trash2, Eye, Layout, Calendar, Search, Activity, Heart, Shield } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 import ProgramForm from './ProgramForm';
 
 const ProgramListPage = () => {
@@ -54,7 +55,7 @@ const ProgramListPage = () => {
                         <div className="flex-shrink-0 h-14 w-14 relative overflow-hidden rounded-2xl border border-gray-100 shadow-sm transition-all group-hover:rotate-3 group-hover:scale-105">
                             <img
                                 className="h-full w-full object-cover"
-                                src={program.image || 'https://via.placeholder.com/150'}
+                                src={getMediaPath(program.image) || 'https://via.placeholder.com/150'}
                                 alt=""
                             />
                         </div>

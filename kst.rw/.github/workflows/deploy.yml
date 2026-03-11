@@ -32,6 +32,9 @@ jobs:
           context: ./kst-frontend
           push: true
           tags: andremugabo/kst-frontend:prod
+          build-args: |
+            VITE_API_URL=https://kst-backend.onrender.com/api
+            VITE_UPLOAD_URL=https://kst-backend.onrender.com
 
       # Build and push Admin
       - name: Build and push Admin
@@ -40,6 +43,9 @@ jobs:
           context: ./admin-kst
           push: true
           tags: andremugabo/kst-admin:prod
+          build-args: |
+            VITE_API_URL=https://kst-backend.onrender.com/api
+            VITE_UPLOAD_URL=https://kst-backend.onrender.com
 
       # Trigger Render Deploy Hooks
       - name: Trigger Backend Deploy

@@ -4,6 +4,7 @@ import { fetchAbout, updateAbout, createAbout } from '../../store/slices/aboutSl
 import { Button, Input } from '../../components/Shared';
 import { Info, User, FileText, Save, Image as ImageIcon, X, CheckCircle2, History } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 
 const AboutManagement = () => {
     const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const AboutManagement = () => {
                 content: about.content || '',
                 founder_name: about.founder_name || '',
             });
-            setImagePreview(about.image);
+            setImagePreview(getMediaPath(about.image));
         }
     }, [about]);
 
@@ -123,7 +124,7 @@ const AboutManagement = () => {
 
                         <div className="flex items-center gap-4 pt-6 mt-12 border-t border-gray-50">
                             <div className="h-16 w-16 rounded-2xl bg-gray-100 border-2 border-white shadow-lg overflow-hidden shrink-0">
-                                <img src={about?.image || 'https://via.placeholder.com/150'} alt="Founder" className="w-full h-full object-cover" />
+                                <img src={getMediaPath(about?.image) || 'https://via.placeholder.com/150'} alt="Founder" className="w-full h-full object-cover" />
                             </div>
                             <div>
                                 <h3 className="text-sm font-black text-gray-900 lowercase tracking-tight">{about?.founder_name || 'The Founder'}</h3>
@@ -134,7 +135,7 @@ const AboutManagement = () => {
 
                     <div className="relative">
                         <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-1000 border-8 border-white group">
-                            <img src={about?.image || 'https://via.placeholder.com/600x800'} alt="Temple Founder" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                            <img src={getMediaPath(about?.image) || 'https://via.placeholder.com/600x800'} alt="Temple Founder" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                         </div>
                         <div className="absolute -bottom-6 -left-6 bg-primary text-white p-6 rounded-[2rem] shadow-2xl shadow-primary/40 -rotate-6">

@@ -4,6 +4,7 @@ import { fetchGallery, deleteMedia } from '../../store/slices/gallerySlice';
 import { Button, Modal } from '../../components/Shared';
 import { Plus, Edit, Trash2, Eye, Filter, Search, Image as ImageIcon, Video, Calendar, Tag, MoreVertical } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 import GalleryForm from './GalleryForm';
 
 const GalleryPage = () => {
@@ -124,7 +125,7 @@ const GalleryPage = () => {
                                 {item.mediaType === 'VIDEO' ? (
                                     <div className="w-full h-full bg-gray-900 relative">
                                         <video
-                                            src={item.mediaUrl}
+                                            src={getMediaPath(item.mediaUrl)}
                                             className="w-full h-full object-cover"
                                             muted
                                             playsInline
@@ -138,7 +139,7 @@ const GalleryPage = () => {
                                     </div>
                                 ) : (
                                     <img
-                                        src={item.mediaUrl}
+                                        src={getMediaPath(item.mediaUrl)}
                                         alt={item.title}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                         loading="lazy"

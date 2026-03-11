@@ -4,6 +4,7 @@ import { fetchBlogs, deleteBlog } from '../../store/slices/blogSlice';
 import { Button, Table, Modal } from '../../components/Shared';
 import { Plus, Edit, Trash2, Eye, Filter, Search, Calendar, User as UserIcon, Tag, FileText } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 import BlogForm from './BlogForm';
 
 const BlogListPage = () => {
@@ -58,7 +59,7 @@ const BlogListPage = () => {
                         <div className="flex-shrink-0 h-12 w-16 relative overflow-hidden rounded-xl border border-gray-100 shadow-sm">
                             <img
                                 className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                src={blog.image || 'https://via.placeholder.com/150'}
+                                src={getMediaPath(blog.image) || 'https://placehold.co/150/png'}
                                 alt=""
                             />
                         </div>
@@ -78,7 +79,7 @@ const BlogListPage = () => {
                     <div className="flex items-center space-x-2">
                         <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300 overflow-hidden">
                             {blog.User?.image ? (
-                                <img src={blog.User.image} alt="" className="w-full h-full object-cover" />
+                                <img src={getMediaPath(blog.User.image)} alt="" className="w-full h-full object-cover" />
                             ) : (
                                 <UserIcon size={12} className="text-gray-400" />
                             )}

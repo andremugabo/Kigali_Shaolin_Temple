@@ -39,10 +39,13 @@ const seedDatabase = async () => {
             await Program.create({
                 name: programName,
                 description: 'Traditional Shaolin Kung Fu training for discipline and strength.',
-                image: 'https://via.placeholder.com/600x400',
+                image: 'https://placehold.co/600x400/png',
                 status: 'active',
             });
             console.log('Sample Program created.');
+        } else if (programExists.image === 'https://via.placeholder.com/600x400') {
+            await programExists.update({ image: 'https://placehold.co/600x400/png' });
+            console.log('Sample Program placeholder updated.');
         }
 
         // 3. Create Sample Club
@@ -54,9 +57,12 @@ const seedDatabase = async () => {
                 name: clubName,
                 description: 'Main headquarters of the Kigali Shaolin Temple.',
                 location: 'Kigali, Rwanda',
-                image: 'https://via.placeholder.com/600x400',
+                image: 'https://placehold.co/600x400/png',
             });
             console.log('Sample Club created.');
+        } else if (clubExists.image === 'https://via.placeholder.com/600x400') {
+            await clubExists.update({ image: 'https://placehold.co/600x400/png' });
+            console.log('Sample Club placeholder updated.');
         }
 
         console.log('Seeding completed successfully.');

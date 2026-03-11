@@ -4,6 +4,7 @@ import { createClub, updateClub } from '../../store/slices/clubSlice';
 import { Button, Input } from '../../components/Shared';
 import { Save, X, Image as ImageIcon, Type, MapPin, FileText, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 
 const ClubForm = ({ club, onClose }) => {
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const ClubForm = ({ club, onClose }) => {
                 location: club.location || '',
             });
             if (club.image) {
-                setImagePreview(club.image);
+                setImagePreview(getMediaPath(club.image));
             }
         }
     }, [club]);

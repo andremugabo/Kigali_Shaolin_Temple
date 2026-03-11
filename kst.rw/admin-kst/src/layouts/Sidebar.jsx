@@ -74,7 +74,7 @@ const Sidebar = () => {
             <div className="p-4 border-t border-gray-800 bg-black/20">
                 <div className="flex items-center space-x-3 p-2 rounded-lg bg-gray-900/50">
                     <img
-                        src={user?.image || 'https://via.placeholder.com/40'}
+                        src={user?.image || 'https://placehold.co/100/png?text=User'}
                         alt="Profile"
                         className="w-10 h-10 rounded-full border border-gray-700 object-cover"
                     />

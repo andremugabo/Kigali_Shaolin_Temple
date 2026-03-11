@@ -19,6 +19,9 @@ RUN rm -f .env*
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 
+ARG VITE_UPLOAD_URL
+ENV VITE_UPLOAD_URL=$VITE_UPLOAD_URL
+
 # Build the application
 RUN npm run build
 

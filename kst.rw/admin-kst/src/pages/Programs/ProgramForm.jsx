@@ -4,6 +4,7 @@ import { createProgram, updateProgram } from '../../store/slices/programSlice';
 import { Button, Input } from '../../components/Shared';
 import { Save, X, Image as ImageIcon, Type, Activity, FileText, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 
 const ProgramForm = ({ program, onClose }) => {
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const ProgramForm = ({ program, onClose }) => {
                 status: program.status || 'active',
             });
             if (program.image) {
-                setImagePreview(program.image);
+                setImagePreview(getMediaPath(program.image));
             }
         }
     }, [program]);

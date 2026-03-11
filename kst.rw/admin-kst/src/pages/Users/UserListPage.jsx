@@ -4,6 +4,7 @@ import { fetchUsers, deleteUser } from '../../store/slices/userSlice';
 import { Button, Table, Modal } from '../../components/Shared';
 import { Plus, Edit, Trash2, Shield, User as UserIcon, Mail, ShieldCheck, Search, MoreVertical, Activity } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 import UserForm from './UserForm';
 
 const UserListPage = () => {
@@ -73,7 +74,7 @@ const UserListPage = () => {
                         <div className="flex-shrink-0 h-12 w-12 relative overflow-hidden rounded-2xl border-2 border-white shadow-md ring-1 ring-gray-100">
                             <img
                                 className="h-full w-full object-cover"
-                                src={user.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`}
+                                src={getMediaPath(user.image) || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`}
                                 alt=""
                             />
                             {isSelf && (

@@ -4,6 +4,7 @@ import { createHeroSlide, updateHeroSlide } from '../../store/slices/heroSlideSl
 import { Button, Input } from '../../components/Shared';
 import { Save, X, Image as ImageIcon, Type, Link, CheckCircle2, Layout, FileText } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 
 const HeroSlideForm = ({ slide, onClose }) => {
     const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const HeroSlideForm = ({ slide, onClose }) => {
                 button_text: slide.button_text || '',
                 button_link: slide.button_link || '',
             });
-            setImagePreview(slide.image);
+            setImagePreview(getMediaPath(slide.image));
         }
     }, [slide]);
 

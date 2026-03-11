@@ -4,6 +4,21 @@ const fs = require('fs').promises;
 const fsSync = require('fs');
 const sharp = require('sharp');
 const crypto = require('crypto');
+const cloudinary = require('cloudinary').v2;
+
+// -------------------- CLOUDINARY INIT --------------------
+// Configure once at module load so all upload handlers share one auth context.
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET,
+});
+
+const UPLOAD_MODE_GLOBAL = process.env.UPLOAD_MODE || 'local';
+console.log(`🔧 [uploadUtils] Upload mode: ${UPLOAD_MODE_GLOBAL.toUpperCase()}`);
+if (UPLOAD_MODE_GLOBAL === 'cloud' && (!process.env.CLOUD_NAME || process.env.CLOUD_NAME === 'your_cloud_name')) {
+    console.error('❌ [uploadUtils] UPLOAD_MODE=cloud but Cloudinary credentials are missing or placeholder! Uploads will FAIL.');
+}
 
 // -------------------- CONFIGURATION --------------------
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
@@ -370,10 +385,9 @@ const createImageProcessor = (subfolder, maxSize) => {
                 .toBuffer();
 
             // Set file metadata on request object (maintains backward compatibility)
-            const UPLOAD_MODE = process.env.UPLOAD_MODE || 'local';
+            const UPLOAD_MODE = UPLOAD_MODE_GLOBAL;
 
             if (UPLOAD_MODE === 'cloud') {
-                const cloudinary = require('cloudinary').v2;
 
                 // Use a promise to handle the cloudinary upload stream
                 const uploadToCloudinary = () => {
@@ -459,33 +473,68 @@ const processAvatar = async (req, res, next) => {
         // Validate image dimensions
         await validateImageDimensions(req.file.buffer);
 
-        // Create directory structure
-        avatarDir = path.join(AVATAR_DIR, sanitizedUserId);
-        await ensureDir(avatarDir);
-
-        // Clean up old avatars (keep only the latest one)
-        await cleanupOldFiles(avatarDir, 0); // Delete all before saving new one
-
-        // Generate secure filename
-        const filename = generateSecureFilename(ext);
-        const filepath = path.join(avatarDir, filename);
-
-        // Process and save avatar
-        await sharp(req.file.buffer)
-            .resize(AVATAR_SIZE, AVATAR_SIZE, {
-                fit: 'cover',
-                position: 'center'
-            })
-            .rotate() // Auto-rotate based on EXIF
-            .withMetadata(false) // Strip EXIF data
-            .toFormat(ext === '.png' ? 'png' : 'jpeg', { quality: IMAGE_QUALITY })
-            .toFile(filepath);
-
         // Set file metadata on request object
-        req.file.filename = filename;
-        const baseUrl = process.env.BACKEND_URL || '';
-        req.file.path = `${baseUrl}/uploads/avatars/${sanitizedUserId}/${filename}`;
-        req.file.secureFilename = filename;
+        const UPLOAD_MODE = UPLOAD_MODE_GLOBAL;
+
+        if (UPLOAD_MODE === 'cloud') {
+            const uploadToCloudinary = async () => {
+                const avatarBuffer = await sharp(req.file.buffer)
+                    .resize(AVATAR_SIZE, AVATAR_SIZE, {
+                        fit: 'cover',
+                        position: 'center'
+                    })
+                    .rotate()
+                    .withMetadata(false)
+                    .toFormat(ext === '.png' ? 'png' : 'jpeg', { quality: IMAGE_QUALITY })
+                    .toBuffer();
+
+                return new Promise((resolve, reject) => {
+                    const uploadStream = cloudinary.uploader.upload_stream(
+                        {
+                            folder: `kst/avatars/${sanitizedUserId}`,
+                            resource_type: 'image',
+                        },
+                        (error, result) => {
+                            if (error) return reject(error);
+                            resolve(result);
+                        }
+                    );
+                    uploadStream.end(avatarBuffer);
+                });
+            };
+
+            const result = await uploadToCloudinary();
+            req.file.path = result.secure_url;
+            req.file.filename = result.public_id;
+            req.file.secureFilename = result.public_id;
+        } else {
+            // Create directory structure
+            avatarDir = path.join(AVATAR_DIR, sanitizedUserId);
+            await ensureDir(avatarDir);
+
+            // Clean up old avatars (keep only the latest one)
+            await cleanupOldFiles(avatarDir, 0); // Delete all before saving new one
+
+            // Generate secure filename
+            const filename = generateSecureFilename(ext);
+            const filepath = path.join(avatarDir, filename);
+
+            // Process and save avatar
+            await sharp(req.file.buffer)
+                .resize(AVATAR_SIZE, AVATAR_SIZE, {
+                    fit: 'cover',
+                    position: 'center'
+                })
+                .rotate() // Auto-rotate based on EXIF
+                .withMetadata(false) // Strip EXIF data
+                .toFormat(ext === '.png' ? 'png' : 'jpeg', { quality: IMAGE_QUALITY })
+                .toFile(filepath);
+
+            req.file.filename = filename;
+            const baseUrl = process.env.BACKEND_URL || '';
+            req.file.path = `${baseUrl}/uploads/avatars/${sanitizedUserId}/${filename}`;
+            req.file.secureFilename = filename;
+        }
 
         next();
     } catch (err) {
@@ -519,22 +568,48 @@ const processVideo = async (req, res, next) => {
         // Validate video file
         await validateVideoFile(req.file.buffer, req.file.mimetype);
 
-        // Create directory structure
-        videoDir = path.join(VIDEO_DIR, subfolder);
-        await ensureDir(videoDir);
-
-        // Generate secure filename
-        const filename = generateSecureFilename(ext);
-        const filepath = path.join(videoDir, filename);
-
-        // Save video (no processing, just validation)
-        await fs.writeFile(filepath, req.file.buffer);
-
         // Set file metadata on request object
-        req.file.filename = filename;
-        const baseUrl = process.env.BACKEND_URL || '';
-        req.file.path = `${baseUrl}/uploads/videos/${subfolder}/${filename}`;
-        req.file.secureFilename = filename;
+        const UPLOAD_MODE = UPLOAD_MODE_GLOBAL;
+
+        if (UPLOAD_MODE === 'cloud') {
+            const uploadToCloudinary = () => {
+                return new Promise((resolve, reject) => {
+                    const uploadStream = cloudinary.uploader.upload_stream(
+                        {
+                            folder: `kst/videos/${subfolder}`,
+                            resource_type: 'video',
+                        },
+                        (error, result) => {
+                            if (error) return reject(error);
+                            resolve(result);
+                        }
+                    );
+                    uploadStream.end(req.file.buffer);
+                });
+            };
+
+            const result = await uploadToCloudinary();
+            req.file.path = result.secure_url;
+            req.file.filename = result.public_id;
+            req.file.secureFilename = result.public_id;
+        } else {
+            // Create directory structure
+            videoDir = path.join(VIDEO_DIR, subfolder);
+            await ensureDir(videoDir);
+
+            // Generate secure filename
+            const filename = generateSecureFilename(ext);
+            const filepath = path.join(videoDir, filename);
+
+            // Save video (no processing, just validation)
+            await fs.writeFile(filepath, req.file.buffer);
+
+            // Set file metadata on request object
+            req.file.filename = filename;
+            const baseUrl = process.env.BACKEND_URL || '';
+            req.file.path = `${baseUrl}/uploads/videos/${subfolder}/${filename}`;
+            req.file.secureFilename = filename;
+        }
 
         next();
     } catch (err) {

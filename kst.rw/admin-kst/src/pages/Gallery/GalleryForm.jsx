@@ -4,6 +4,7 @@ import { uploadMedia, updateMedia } from '../../store/slices/gallerySlice';
 import { Button, Input } from '../../components/Shared';
 import { Save, X, Image as ImageIcon, Video, Type, FileText, Calendar, Tag, CheckCircle2 } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 
 const GalleryForm = ({ item, onClose }) => {
     const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const GalleryForm = ({ item, onClose }) => {
                 mediaType: item.mediaType || 'IMAGE',
                 eventDate: item.eventDate ? new Date(item.eventDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
             });
-            setPreview(item.mediaUrl);
+            setPreview(getMediaPath(item.mediaUrl));
         }
     }, [item]);
 
@@ -208,13 +209,13 @@ const GalleryForm = ({ item, onClose }) => {
                             {item.mediaType === 'VIDEO' ? (
                                 <div className="w-full h-full bg-gray-900 flex items-center justify-center relative">
                                     <video
-                                        src={item.mediaUrl}
+                                        src={getMediaPath(item.mediaUrl)}
                                         className="w-full h-full object-contain"
                                         controls
                                     />
                                 </div>
                             ) : (
-                                <img src={item.mediaUrl} alt="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                                <img src={getMediaPath(item.mediaUrl)} alt="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                             )}
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <p className="text-white text-[10px] font-black uppercase tracking-[0.3em]">Locked Architecture</p>

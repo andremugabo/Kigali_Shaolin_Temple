@@ -54,7 +54,7 @@ const Navbar = ({ toggleSidebar }) => {
                         </div>
                         <div className="relative group">
                             <img
-                                src={user?.image || 'https://via.placeholder.com/40'}
+                                src={user?.image || 'https://placehold.co/100/png?text=Avatar'}
                                 alt="Avatar"
                                 className="w-9 h-9 rounded-full border-2 border-gray-100 object-cover group-hover:border-primary transition-all"
                             />

@@ -4,6 +4,7 @@ import { fetchHeroSlides, deleteHeroSlide } from '../../store/slices/heroSlideSl
 import { Button, Modal } from '../../components/Shared';
 import { Plus, Edit, Trash2, Layout, Image as ImageIcon, ExternalLink, MoveUpRight, Info } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 import HeroSlideForm from './HeroSlideForm';
 
 const HeroSlidesPage = () => {
@@ -93,7 +94,7 @@ const HeroSlidesPage = () => {
                                 </div>
 
                                 <div className="relative aspect-[21/9] rounded-[2.5rem] overflow-hidden shadow-2xl shadow-gray-200/50 border border-gray-100">
-                                    <img src={slide.image} alt={slide.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                                    <img src={getMediaPath(slide.image)} alt={slide.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                                     <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent flex items-center p-12 lg:p-24">
                                         <div className="max-w-xl space-y-4">
                                             <span className="inline-block px-4 py-1.5 bg-primary/20 backdrop-blur-md rounded-full text-[10px] font-black text-white uppercase tracking-[0.3em] border border-white/20">Active Spectacle</span>

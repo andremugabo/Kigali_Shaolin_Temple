@@ -4,6 +4,7 @@ import { updateProfile } from '../../store/slices/authSlice';
 import { Button, Input } from '../../components/Shared';
 import { User, Mail, Lock, Camera, Save, CheckCircle2, Shield, Activity, Calendar, ShieldCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 
 const ProfilePage = () => {
     const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const ProfilePage = () => {
                 email: user.email || '',
                 password: '',
             });
-            setImagePreview(user.image);
+            setImagePreview(getMediaPath(user.image));
         }
     }, [user]);
 

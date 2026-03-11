@@ -4,6 +4,7 @@ import { fetchClubs, deleteClub, fetchTutorials } from '../../store/slices/clubS
 import { Button, Table, Modal } from '../../components/Shared';
 import { Plus, Edit, Trash2, Eye, MapPin, Film, Info, Search, RefreshCw } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 import ClubForm from './ClubForm';
 import TutorialManagement from './TutorialManagement';
 
@@ -62,7 +63,7 @@ const ClubListPage = () => {
                         <div className="flex-shrink-0 h-14 w-14 relative overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
                             <img
                                 className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                src={club.image || 'https://via.placeholder.com/150'}
+                                src={getMediaPath(club.image) || 'https://placehold.co/150/png'}
                                 alt=""
                             />
                         </div>

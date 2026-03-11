@@ -4,6 +4,7 @@ import { addTutorial, removeTutorial } from '../../store/slices/clubSlice';
 import { Button, Input } from '../../components/Shared';
 import { Video, Trash2, Plus, Play, Info, Type, FileText, X } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { getMediaPath } from '../../api/apiClient';
 
 const TutorialManagement = ({ club, onClose }) => {
     const dispatch = useDispatch();
@@ -153,7 +154,7 @@ const TutorialManagement = ({ club, onClose }) => {
                                 <div className="flex items-center space-x-4">
                                     <div className="w-16 h-12 rounded-xl bg-gray-900 overflow-hidden relative group/vid shadow-lg transition-transform group-hover:scale-105">
                                         <video
-                                            src={tutorial.videoUrl}
+                                            src={getMediaPath(tutorial.videoUrl)}
                                             className="w-full h-full object-cover"
                                             muted
                                             playsInline
@@ -183,7 +184,7 @@ const TutorialManagement = ({ club, onClose }) => {
                                     <span>Tutorial ID: {tutorial.id.substring(0, 8)}</span>
                                 </div>
                                 <a
-                                    href={tutorial.videoUrl}
+                                    href={getMediaPath(tutorial.videoUrl)}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline flex items-center"
