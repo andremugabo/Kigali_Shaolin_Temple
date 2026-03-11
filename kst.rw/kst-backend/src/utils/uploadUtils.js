@@ -358,16 +358,8 @@ const createImageProcessor = (subfolder, maxSize) => {
             // Validate image dimensions
             await validateImageDimensions(req.file.buffer);
 
-            // Create directory structure
-            imageDir = path.join(IMAGE_DIR, subfolder);
-            await ensureDir(imageDir);
-
-            // Generate secure filename
-            const filename = generateSecureFilename(ext);
-            const filepath = path.join(imageDir, filename);
-
             // Process and save image
-            await sharp(req.file.buffer)
+            const processedBuffer = await sharp(req.file.buffer)
                 .resize(maxSize, maxSize, {
                     fit: 'inside',
                     withoutEnlargement: true
@@ -375,13 +367,49 @@ const createImageProcessor = (subfolder, maxSize) => {
                 .rotate() // Auto-rotate based on EXIF
                 .withMetadata(false) // Strip EXIF data for privacy
                 .toFormat(ext === '.png' ? 'png' : 'jpeg', { quality: IMAGE_QUALITY })
-                .toFile(filepath);
+                .toBuffer();
 
             // Set file metadata on request object (maintains backward compatibility)
-            req.file.filename = filename;
-            const baseUrl = process.env.BACKEND_URL || '';
-            req.file.path = `${baseUrl}/uploads/images/${subfolder}/${filename}`;
-            req.file.secureFilename = filename;
+            const UPLOAD_MODE = process.env.UPLOAD_MODE || 'local';
+
+            if (UPLOAD_MODE === 'cloud') {
+                const cloudinary = require('cloudinary').v2;
+
+                // Use a promise to handle the cloudinary upload stream
+                const uploadToCloudinary = () => {
+                    return new Promise((resolve, reject) => {
+                        const uploadStream = cloudinary.uploader.upload_stream(
+                            {
+                                folder: `kst/${subfolder}`,
+                                resource_type: 'auto',
+                            },
+                            (error, result) => {
+                                if (error) return reject(error);
+                                resolve(result);
+                            }
+                        );
+                        uploadStream.end(processedBuffer);
+                    });
+                };
+
+                const result = await uploadToCloudinary();
+                req.file.path = result.secure_url;
+                req.file.filename = result.public_id;
+                req.file.secureFilename = result.public_id;
+            } else {
+                // Local storage
+                imageDir = path.join(IMAGE_DIR, subfolder);
+                await ensureDir(imageDir);
+
+                const filename = generateSecureFilename(ext);
+                const filepath = path.join(imageDir, filename);
+                await fs.writeFile(filepath, processedBuffer);
+
+                req.file.filename = filename;
+                const baseUrl = process.env.BACKEND_URL || '';
+                req.file.path = `${baseUrl}/uploads/images/${subfolder}/${filename}`;
+                req.file.secureFilename = filename;
+            }
 
             next();
         } catch (err) {

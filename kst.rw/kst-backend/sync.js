@@ -8,7 +8,7 @@ const syncDatabase = async () => {
         // Sync all models
         // alter: true will check current state of table and perform necessary changes to match model
         // force: true will drop tables and recreate them (Use with caution!)
-        await sequelize.sync({ force: true });
+        await sequelize.sync({ alter: true });
 
         console.log('All models were synchronized successfully.');
         process.exit(0);

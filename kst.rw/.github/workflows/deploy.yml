@@ -1,0 +1,55 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build and push Backend
+      - name: Build and push Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./kst-backend
+          push: true
+          tags: andremugabo/kst-backend:latest
+
+      # Build and push Frontend
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./kst-frontend
+          push: true
+          tags: andremugabo/kst-frontend:latest
+
+      # Build and push Admin
+      - name: Build and push Admin
+        uses: docker/build-push-action@v5
+        with:
+          context: ./admin-kst
+          push: true
+          tags: andremugabo/kst-admin:latest
+
+      # Trigger Render Deploy Hooks
+      - name: Trigger Backend Deploy
+        if: success()
+        run: curl -X POST ${{ secrets.RENDER_BACKEND_HOOK_URL }}
+
+      - name: Trigger Frontend Deploy
+        if: success()
+        run: curl -X POST ${{ secrets.RENDER_FRONTEND_HOOK_URL }}
+
+      - name: Trigger Admin Deploy
+        if: success()
+        run: curl -X POST ${{ secrets.RENDER_ADMIN_HOOK_URL }}

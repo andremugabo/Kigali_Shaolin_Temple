@@ -8,9 +8,9 @@ services:
   # 1. Backend API
   - type: web
     name: kst-backend
-    runtime: docker
-    dockerContext: ./kst-backend
-    dockerfile: Dockerfile
+    runtime: image
+    image:
+      url: andremugabo/kst-backend:latest
     plan: free
     envVars:
       - key: NODE_ENV
@@ -18,35 +18,36 @@ services:
       # Neon.tech Connection String
       - key: DATABASE_URL
         value: postgresql://neondb_owner:npg_hJdj0ZKqgR5v@ep-fragrant-firefly-ahhqfjb9-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require
-      # Option B: Use this if you want Render to link it automatically (requires deleting your other free DB first)
-      # - key: DATABASE_URL
-      #   fromDatabase:
-      #     name: kst-db-prod
-      #     property: connectionString
       - key: JWT_SECRET
         generateValue: true
       - key: PORT
         value: 3005
+      - key: UPLOAD_MODE
+        value: cloud
+      - key: CLOUD_NAME
+        value: your_cloud_name
+      - key: API_KEY
+        value: your_api_key
+      - key: API_SECRET
+        value: your_api_secret
 
   # 2. Public Frontend
   - type: web
     name: kst-frontend-public
-    runtime: docker
-    dockerContext: ./kst-frontend
-    dockerfile: Dockerfile
+    runtime: image
+    image:
+      url: andremugabo/kst-frontend:latest
     plan: free
     envVars:
       - key: VITE_API_URL
-        # In production, this should be the public URL of the backend
-        # e.g., https://kst-backend.onrender.com/api
         value: https://kst-backend.onrender.com/api
 
   # 3. Admin Portal
   - type: web
     name: kst-admin-portal
-    runtime: docker
-    dockerContext: ./admin-kst
-    dockerfile: Dockerfile
+    runtime: image
+    image:
+      url: andremugabo/kst-admin:latest
     plan: free
     envVars:
       - key: VITE_API_URL

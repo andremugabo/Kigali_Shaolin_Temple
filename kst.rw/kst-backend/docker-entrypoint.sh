@@ -7,7 +7,7 @@ echo "Starting database synchronization and seeding..."
 
 # Run sync and seed
 if [ "$NODE_ENV" = "production" ]; then
-  echo "Production mode detected. Running safe sync (alter:true) and seeding..."
+  echo "Production mode detected. Running database sync (alter:true)..."
   npm run db:sync || echo "Sync failed, continuing..."
   node seed.js || echo "Seeding failed (user likely already exists), continuing..."
 else
